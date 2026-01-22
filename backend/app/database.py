@@ -7,20 +7,11 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL, echo=True)
-
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,
+    connect_args={"check_same_thread": False}  # IMPORTANTE para SQLite
 )
 
+SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
