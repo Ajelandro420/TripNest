@@ -1,2 +1,4 @@
-from .user import UserBase, UserCreate, UserResponse
-from .trip import TripBase, TripCreate, TripResponse
+from .user import UserCreate, UserResponse
+from .trip import TripCreate, TripResponse
+from .promotion import PromotionCreate, PromotionResponse
+from .chat import ChatCreate, ChatResponse

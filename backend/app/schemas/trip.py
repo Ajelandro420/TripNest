@@ -1,14 +1,12 @@
 from pydantic import BaseModel
-from datetime import date
+from typing import Optional
 
 
 class TripBase(BaseModel):
     title: str
-    description: str | None = None
     destination: str
     price: float
-    start_date: date
-    end_date: date
+    description: Optional[str] = None
 
 
 class TripCreate(TripBase):
