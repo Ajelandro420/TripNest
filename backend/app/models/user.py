@@ -2,6 +2,9 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from app.database import Base
+from sqlalchemy.orm import relationship
+
+trips = relationship("Trip", back_populates="owner")
 
 class User(Base):
     __tablename__ = "users"
