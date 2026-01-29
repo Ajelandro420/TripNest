@@ -1,13 +1,14 @@
-# python
 from fastapi import FastAPI
-from app.models.user import User
-from app.models import User, Trip, Promotion, Chat
+from app.database import engine, Base
+from app.models import user
+from app.routers import auth
+
+app = FastAPI()
+
 Base.metadata.create_all(bind=engine)
 
-
-
-app = FastAPI(title="Tripnest API")
+app.include_router(auth.router)
 
 @app.get("/")
 def root():
-    return {"status": "Tripnest backend running"}
+    return {"message": "TravelConnect backend operativo"}
