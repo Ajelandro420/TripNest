@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 class User(Base):
@@ -10,3 +11,6 @@ class User(Base):
     full_name = Column(String(100), nullable=False)
     role = Column(String(20), default="viatger")
     bio = Column(String(255), nullable=True)
+
+    trips = relationship("Trip", back_populates="creator")
+    messages = relationship("Message", back_populates="sender")

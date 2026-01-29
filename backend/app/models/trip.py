@@ -14,5 +14,7 @@ class Trip(Base):
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
 
-    owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="trips")
+    creator_id = Column(Integer, ForeignKey("users.id"))
+    creator = relationship("User", back_populates="trips")
+
+    promotion = relationship("Promotion", back_populates="trip")

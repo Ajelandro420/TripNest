@@ -12,4 +12,4 @@ class Promotion(Base):
 
     trip_id = Column(Integer, ForeignKey("trips.id"))
 
-    trip = relationship("Trip", back_populates="promotions")
+    trip = relationship("Trip", back_populates="promotion")
