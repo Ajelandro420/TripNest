@@ -13,4 +13,4 @@ class User(Base):
     bio = Column(String(255), nullable=True)
 
     trips = relationship("Trip", back_populates="creator")
-    messages = relationship("Message", back_populates="sender")
+    messages = relationship("Message", back_populates="user")
