@@ -1,0 +1,187 @@
+/* ══════════════════════════════════════
+   TRIPNEST — TRIPDETAIL.CSS
+══════════════════════════════════════ */
+
+.tn-detail {
+    padding: 48px 0 80px;
+}
+
+/* ── BANNER SUPERIOR ── */
+.tn-detail__banner {
+    background: linear-gradient(135deg, #0D2B45 0%, #1A5276 50%, #17A589 100%);
+    border-radius: var(--tn-r-lg);
+    padding: 40px 36px;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tn-detail__banner::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(72,201,176,0.1);
+    pointer-events: none;
+}
+
+.tn-detail__banner::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 20%;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(245,203,167,0.07);
+    pointer-events: none;
+}
+
+.tn-detail__banner-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.tn-detail__title {
+    font-family: var(--tn-font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.tn-detail__meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.tn-detail__meta-item {
+    font-family: var(--tn-font-body);
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.75);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 300;
+}
+
+.tn-detail__estat-badge {
+    padding: 6px 18px;
+    border-radius: var(--tn-r-pill);
+    font-family: var(--tn-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tn-detail__estat-badge--Planificant { background: rgba(93,173,226,0.25); color: #A8D8F0; }
+.tn-detail__estat-badge--Actiu       { background: rgba(72,201,176,0.25); color: #80E8D5; }
+.tn-detail__estat-badge--Completat   { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); }
+.tn-detail__estat-badge--Cancelat    { background: rgba(231,76,60,0.25); color: #F1948A; }
+
+/* ── LAYOUT 2 COLUMNES ── */
+.tn-detail__grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* ── CARD INFO ── */
+.tn-detail__info-card {
+    background: #ffffff;
+    border-radius: var(--tn-r-lg);
+    box-shadow: var(--tn-shadow-md);
+    border: 1px solid var(--tn-border);
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.tn-detail__section-title {
+    font-family: var(--tn-font-display);
+    font-size: 1.05rem;
+    color: var(--tn-mar-profund);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tn-detail__description {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--tn-text-sec);
+    font-weight: 300;
+    margin: 0;
+}
+
+/* ── BARRA PARTICIPANTS ── */
+.tn-detail__participants {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(26,82,118,0.08);
+}
+
+.tn-detail__participants-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tn-detail__participants-label {
+    font-family: var(--tn-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--tn-text-muted);
+}
+
+.tn-detail__participants-count {
+    font-family: var(--tn-font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--tn-turquesa);
+}
+
+.tn-detail__progress {
+    height: 8px;
+    background: rgba(26,82,118,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tn-detail__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #17A589, #48C9B0);
+    border-radius: 4px;
+    transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── BOTONS D'ACCIÓ ── */
+.tn-detail__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+    .tn-detail__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+    .tn-detail__banner  { padding: 28px 20px; border-radius: var(--tn-r-md); }
+    .tn-detail__info-card { padding: 22px 18px; }
+    .tn-detail__actions { flex-direction: column; }
+}

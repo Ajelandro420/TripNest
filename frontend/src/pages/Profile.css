@@ -1,0 +1,172 @@
+/* ══════════════════════════════════════
+   TRIPNEST — PROFILE.CSS
+══════════════════════════════════════ */
+
+.tn-profile {
+    padding: 48px 0 80px;
+    min-height: calc(100vh - var(--tn-navbar-h) - 160px);
+}
+
+/* ── CAPÇALERA DE PERFIL ── */
+.tn-profile__hero {
+    background: linear-gradient(135deg, #0D2B45 0%, #1A5276 50%, #17A589 100%);
+    border-radius: var(--tn-r-lg);
+    padding: 36px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tn-profile__hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(72,201,176,0.1);
+    pointer-events: none;
+}
+
+.tn-profile__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E59866, #F5CBA7);
+    color: #0D2B45;
+    font-family: var(--tn-font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(229,152,102,0.5);
+    border: 3px solid rgba(255,255,255,0.2);
+}
+
+.tn-profile__hero-info {
+    flex: 1;
+}
+
+.tn-profile__hero-name {
+    font-family: var(--tn-font-display);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.tn-profile__hero-email {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.65);
+    margin: 0;
+    font-weight: 300;
+}
+
+.tn-profile__rol-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--tn-r-pill);
+    padding: 5px 14px;
+    font-family: var(--tn-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 10px;
+    backdrop-filter: blur(8px);
+}
+
+/* ── CARD DEL FORMULARI ── */
+.tn-profile__card {
+    background: #ffffff;
+    border-radius: var(--tn-r-lg);
+    box-shadow: var(--tn-shadow-md);
+    border: 1px solid var(--tn-border);
+    padding: 36px;
+}
+
+.tn-profile__card-title {
+    font-family: var(--tn-font-display);
+    font-size: 1.2rem;
+    color: var(--tn-mar-profund);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(23,165,137,0.12);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ── CAMPS DEL FORMULARI ── */
+.tn-profile-form-group {
+    margin-bottom: 20px;
+}
+
+.tn-profile-form-group label {
+    display: block;
+    font-family: var(--tn-font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--tn-mar-mig);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.tn-profile-form-group input,
+.tn-profile-form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--tn-font-body);
+    font-size: 0.95rem;
+    color: var(--tn-text);
+    background: #F4F9FF;
+    border: 2px solid rgba(26,82,118,0.1);
+    border-radius: var(--tn-r-md);
+    transition: border-color var(--tn-t-fast), background var(--tn-t-fast), box-shadow var(--tn-t-fast);
+    outline: none;
+}
+
+.tn-profile-form-group input:focus,
+.tn-profile-form-group textarea:focus {
+    border-color: var(--tn-turquesa);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(23,165,137,0.12);
+}
+
+.tn-profile-form-group textarea { resize: vertical; min-height: 100px; }
+
+.tn-profile-form-group input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: rgba(26,82,118,0.04);
+}
+
+.tn-profile__hint {
+    font-size: 0.75rem;
+    color: var(--tn-text-muted);
+    margin-top: 5px;
+    display: block;
+}
+
+/* ── ACCIONS ── */
+.tn-profile__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    .tn-profile__hero    { flex-direction: column; text-align: center; padding: 28px 20px; }
+    .tn-profile__card    { padding: 24px 20px; }
+    .tn-profile__actions { flex-direction: column; }
+}

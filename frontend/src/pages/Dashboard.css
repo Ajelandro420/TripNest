@@ -1,0 +1,54 @@
+:root {
+    --tn-navbar-h: 60px;
+    --tn-font-display: 'Arial', sans-serif;
+    --tn-mar-profund: #333;
+    --tn-text-muted: #888;
+    --tn-r-md: 8px;
+    --tn-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --tn-border: #ccc;
+    --tn-r-pill: 50px;
+    --tn-t-fast: 0.2s;
+    --tn-turquesa: #1abc9c;
+    --tn-font-body: 'Verdana', sans-serif;
+    --tn-text: #000;
+}
+
+body {
+    min-height: calc(100vh - var(--tn-navbar-h) - 160px);
+    font-family: var(--tn-font-body), sans-serif;
+    color: var(--tn-text);
+}
+
+h1 {
+    font-family: var(--tn-font-display), sans-serif;
+    color: var(--tn-mar-profund);
+}
+
+p {
+    color: var(--tn-text-muted);
+}
+
+.card {
+    border-radius: var(--tn-r-md);
+    box-shadow: var(--tn-shadow-sm);
+    border: 1px solid var(--tn-border);
+}
+
+.button {
+    border-radius: var(--tn-r-pill);
+    transition: border-color var(--tn-t-fast), box-shadow var(--tn-t-fast);
+}
+
+.button:hover {
+    border-color: var(--tn-turquesa);
+    color: var(--tn-turquesa);
+}
+
+.footer {
+    font-family: var(--tn-font-display), sans-serif;
+    color: var(--tn-mar-profund);
+}
+
+.footer p {
+    color: var(--tn-text-muted);
+}

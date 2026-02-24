@@ -1,0 +1,104 @@
+/* ══════════════════════════════════════
+   TRIPNEST — REGISTER.CSS
+   Importa la base d'auth i afegeix
+   estils específics del registre
+══════════════════════════════════════ */
+
+@import './Login.css';
+
+/* ── CARD MÉS AMPLA PER AL REGISTRE ── */
+.tn-auth-page--register .tn-auth-card {
+    max-width: 480px;
+}
+
+/* ── GRID 2 COLUMNES PER A DATES ── */
+.tn-auth-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+/* ── INDICADOR DE FORTALESA DE CONTRASENYA ── */
+.tn-password-strength {
+    margin-top: 8px;
+}
+
+.tn-password-strength__bar {
+    height: 4px;
+    background: rgba(26,82,118,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.tn-password-strength__fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease, background 0.4s ease;
+}
+
+.tn-password-strength__fill--weak   { width: 25%; background: #E74C3C; }
+.tn-password-strength__fill--fair   { width: 50%; background: #E59866; }
+.tn-password-strength__fill--good   { width: 75%; background: #F5CBA7; }
+.tn-password-strength__fill--strong { width: 100%; background: linear-gradient(90deg,#17A589,#48C9B0); }
+
+.tn-password-strength__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.tn-password-strength__label--weak   { color: #E74C3C; }
+.tn-password-strength__label--fair   { color: #B7770D; }
+.tn-password-strength__label--good   { color: #1A6FA8; }
+.tn-password-strength__label--strong { color: #0E8A74; }
+
+/* ── CHECKBOX TERMES ── */
+.tn-auth-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 16px 0 4px;
+    cursor: pointer;
+}
+
+.tn-auth-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid rgba(26,82,118,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1px;
+    accent-color: var(--tn-turquesa);
+}
+
+.tn-auth-checkbox__label {
+    font-size: 0.82rem;
+    color: var(--tn-text-muted);
+    line-height: 1.5;
+}
+
+.tn-auth-checkbox__label a {
+    color: var(--tn-turquesa);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.tn-auth-checkbox__label a:hover { color: var(--tn-turquesa-clar); }
+
+/* ── BOTÓ REGISTER (turquesa en lloc de blau) ── */
+.tn-auth-submit--register {
+    background: linear-gradient(135deg, #17A589 0%, #48C9B0 100%);
+    box-shadow: 0 4px 16px rgba(23,165,137,0.38);
+}
+
+.tn-auth-submit--register:hover:not(:disabled) {
+    box-shadow: 0 8px 28px rgba(23,165,137,0.52);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+    .tn-auth-form-row { grid-template-columns: 1fr; }
+}
