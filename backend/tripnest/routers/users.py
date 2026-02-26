@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.dependencies import get_db, get_current_user
-from app.models.user import User
-from app.models.promotion_request import PromotionRequest
-from app.schemas.user import UserOut, UserUpdate
-from app.schemas.promotion import PromotionCreate, PromotionResponse
+from tripnest.core.dependencies import get_db, get_current_user
+from tripnest.models.user import User
+from tripnest.models.promotion_request import PromotionRequest
+from tripnest.schemas.user import UserOut, UserUpdate
+from tripnest.schemas.promotion import PromotionCreate, PromotionResponse
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

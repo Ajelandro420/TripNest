@@ -4,12 +4,12 @@ from typing import List
 import json
 from datetime import datetime
 
-from app.core.dependencies import get_db, get_current_user
-from app.models.user import User
-from app.models.trip import Trip
-from app.models.message import Message
-from app.schemas.message import MessageCreate, MessageOut
-from app.core.config import SECRET_KEY, ALGORITHM
+from tripnest.core.dependencies import get_db, get_current_user
+from tripnest.models.user import User
+from tripnest.models.trip import Trip
+from tripnest.models.message import Message
+from tripnest.schemas.message import MessageCreate, MessageOut
+from tripnest.core.config import SECRET_KEY, ALGORITHM
 from jose import jwt, JWTError
 
 router = APIRouter(tags=["Chat"])

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database import Base
-from app.models.user import trip_participants
+from tripnest.database import Base
+from tripnest.models.user import trip_participants
 
 class Trip(Base):
     __tablename__ = "trips"

@@ -3,9 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
-from app.models.user import User
-from app.core.config import SECRET_KEY, ALGORITHM
+from tripnest.database import SessionLocal
+from tripnest.models.user import User
+from tripnest.core.config import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 

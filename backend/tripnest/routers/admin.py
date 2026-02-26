@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.core.dependencies import get_db, get_current_user
-from app.models.user import User
-from app.models.promotion_request import PromotionRequest
-from app.schemas.user import UserOut, UserRoleUpdate
-from app.schemas.promotion import PromotionResponse, PromotionStatusUpdate
+from tripnest.core.dependencies import get_db, get_current_user
+from tripnest.models.user import User
+from tripnest.models.promotion_request import PromotionRequest
+from tripnest.schemas.user import UserOut, UserRoleUpdate
+from tripnest.schemas.promotion import PromotionResponse, PromotionStatusUpdate
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 

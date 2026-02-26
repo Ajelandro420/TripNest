@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import engine, Base
+from tripnest.database import engine, Base
 
 # Importar tots els models perquè SQLAlchemy els registri
-from app.models import User, Trip, Message, PromotionRequest
+from tripnest.models import User, Trip, Message, PromotionRequest
 
 # Importar routers
-from app.routers import auth, users, trips, admin, chat
+from tripnest.routers import auth, users, trips, admin, chat
 
 # Crear taules a la BD
 Base.metadata.create_all(bind=engine)

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from app.schemas.user import UserOut
+from tripnest.schemas.user import UserOut
 
 class PromotionCreate(BaseModel):
     msg_content: str

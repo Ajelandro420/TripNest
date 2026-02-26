@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.core.dependencies import get_db, get_current_user
-from app.models.user import User
-from app.models.trip import Trip
-from app.schemas.trip import TripCreate, TripUpdate, TripResponse
+from tripnest.core.dependencies import get_db, get_current_user
+from tripnest.models.user import User
+from tripnest.models.trip import Trip
+from tripnest.schemas.trip import TripCreate, TripUpdate, TripResponse
 
 router = APIRouter(prefix="/trips", tags=["Trips"])
 

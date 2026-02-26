@@ -58,7 +58,7 @@ function AppSkeleton() {
     )
 }
 
-/* ── Inner app que espera que AuthContext estigui llest ── */
+/* ── Inner tripnest que espera que AuthContext estigui llest ── */
 function AppInner() {
     const { loading } = useAuth()
 

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database import Base
+from tripnest.database import Base
 
 class PromotionRequest(Base):
     __tablename__ = "promotion_requests"

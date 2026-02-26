@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database import Base
+from tripnest.database import Base
 
 trip_participants = Table(
     "trip_participants",

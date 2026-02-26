@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from app.core.security import get_password_hash, verify_password, create_access_token
-from app.schemas.user import Token
-from app.database import SessionLocal
-from app.models.user import User
-from app.schemas.user import UserCreate, UserOut, Token
+from tripnest.core.security import get_password_hash, verify_password, create_access_token
+from tripnest.schemas.user import Token
+from tripnest.database import SessionLocal
+from tripnest.models.user import User
+from tripnest.schemas.user import UserCreate, UserOut, Token
 
 router = APIRouter(
     prefix="/auth",
