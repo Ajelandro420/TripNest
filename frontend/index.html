@@ -1,244 +1,60 @@
 <!doctype html>
 <html lang="ca" dir="ltr">
 <head>
-  <!-- ═══════════════════════════════════════════
-       META BÀSIC
-  ═══════════════════════════════════════════ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <!-- ═══════════════════════════════════════════
-       SEO & DESCRIPCIÓ
-  ═══════════════════════════════════════════ -->
+  <!-- SEO -->
   <title>TripNest — Planifica i comparteix viatges en grup</title>
-  <meta name="description" content="TripNest és la plataforma per planificar, gestionar i comunicar-te en els teus viatges en grup. Descobreix destins, uneix-te a expedicions i viu l'experiència mediterrània." />
-  <meta name="keywords" content="viatges en grup, planificació de viatges, turisme, aventura, mediterrani, TripNest" />
-  <meta name="author" content="TripNest" />
+  <meta name="description" content="TripNest és la plataforma per planificar, gestionar i comunicar-te en els teus viatges en grup." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://tripnest.app/" />
 
-  <!-- ═══════════════════════════════════════════
-       OPEN GRAPH (xarxes socials)
-  ═══════════════════════════════════════════ -->
+  <!-- Open Graph -->
+  <meta property="og:title"       content="TripNest — Viatges en grup" />
+  <meta property="og:description" content="Planifica, gestiona i comparteix viatges en grup." />
   <meta property="og:type"        content="website" />
-  <meta property="og:site_name"   content="TripNest" />
-  <meta property="og:title"       content="TripNest — Planifica i comparteix viatges en grup" />
-  <meta property="og:description" content="La plataforma per organitzar viatges en grup amb xat integrat, gestió de participants i molt més." />
-  <meta property="og:image"       content="https://tripnest.app/og-image.jpg" />
-  <meta property="og:image:alt"   content="TripNest — Vista de platja mediterrània" />
-  <meta property="og:url"         content="https://tripnest.app/" />
-  <meta property="og:locale"      content="ca_ES" />
 
-  <!-- ═══════════════════════════════════════════
-       TWITTER CARD
-  ═══════════════════════════════════════════ -->
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="TripNest — Planifica i comparteix viatges en grup" />
-  <meta name="twitter:description" content="Organitza els teus viatges en grup amb TripNest. Xat integrat, rols i gestió completa." />
-  <meta name="twitter:image"       content="https://tripnest.app/og-image.jpg" />
-  <meta name="twitter:image:alt"   content="TripNest logo i platja mediterrània" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 
-  <!-- ═══════════════════════════════════════════
-       FAVICON & ICONES APP
-  ═══════════════════════════════════════════ -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
-  <meta name="theme-color" content="#0D2B45" />
-  <meta name="msapplication-TileColor" content="#0D2B45" />
-
-  <!-- ═══════════════════════════════════════════
-       TIPOGRAFIES (Google Fonts)
-       Playfair Display: títols i display
-       Lato: cos de text i UI
-  ═══════════════════════════════════════════ -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Lato:wght@300;400;700&display=swap"
-          rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
 
-  <!-- ═══════════════════════════════════════════
-       ACCESSIBILITAT — WCAG 2.1 AA
-       Indicació d'idioma per lectors de pantalla
-       (ja definit a <html lang="ca">)
-       Color-scheme per respectar preferències del SO
-  ═══════════════════════════════════════════ -->
+  <!-- Theme color (barra mòbil) -->
+  <meta name="theme-color" content="#0D2B45" />
   <meta name="color-scheme" content="light" />
 
-  <!-- ═══════════════════════════════════════════
-       RENDIMENT — Preload de recursos crítics
-  ═══════════════════════════════════════════ -->
-  <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap"
-          as="style"
-  />
-
-  <!-- ═══════════════════════════════════════════
-       STRUCTURED DATA — Schema.org (SEO avançat)
-  ═══════════════════════════════════════════ -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "TripNest",
-      "description": "Plataforma per planificar i gestionar viatges en grup amb xat integrat.",
-      "url": "https://tripnest.app",
-      "applicationCategory": "TravelApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR"
-      },
-      "inLanguage": "ca"
-    }
-  </script>
-
-  <!-- ═══════════════════════════════════════════
-       GOOGLE ANALYTICS (GA4)
-       Substitueix G-XXXXXXXXXX pel teu Measurement ID
-  ═══════════════════════════════════════════ -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX', {
-      page_title:    document.title,
-      page_location: window.location.href,
-      anonymize_ip:  true   /* RGPD compliance */
-    });
-  </script>
-
-  <!-- ═══════════════════════════════════════════
-       ESTIL CRÍTIC INLINE
-       Evita el flash de contingut sense estil (FOUC)
-       i defineix les variables bàsiques del disseny
-  ═══════════════════════════════════════════ -->
   <style>
-    /* Variables crítiques — carregades abans del bundle */
-    :root {
-      --color-mar-profund:   #0D2B45;
-      --color-turquesa:      #17A589;
-      --color-turquesa-clar: #48C9B0;
-      --color-sorra-daurada: #E59866;
-      --color-bg:            #F0F7FF;
-      --font-display: 'Playfair Display', Georgia, serif;
-      --font-body:    'Lato', -apple-system, sans-serif;
-    }
-
-    /* Reset mínim per evitar FOUC */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
+    html { scroll-behavior: smooth; }
     body {
-      font-family: var(--font-body);
-      background-color: var(--color-bg);
-      color: var(--color-mar-profund);
+      font-family: 'Lato', -apple-system, sans-serif;
+      background: #F0F7FF;
+      color: #0D2B45;
       min-height: 100vh;
     }
 
-    /* ── Loading screen mentre carrega React ── */
-    #app-loading {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #0D2B45 0%, #1A5276 50%, #17A589 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      z-index: 9999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-
-    #app-loading.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .loading-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: white;
-      letter-spacing: 1px;
-      animation: loadingPulse 1.8s ease-in-out infinite;
-    }
-
-    .loading-logo span {
-      color: #48C9B0;
-    }
-
-    .loading-icon {
-      font-size: 2.5rem;
-      animation: loadingFloat 2s ease-in-out infinite;
-    }
-
-    .loading-bar {
-      width: 180px;
-      height: 3px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .loading-bar__fill {
-      height: 100%;
-      background: linear-gradient(90deg, #48C9B0, #E59866, #48C9B0);
-      background-size: 200% 100%;
-      border-radius: 2px;
-      animation: loadingBar 1.5s ease-in-out infinite;
-    }
-
-    @keyframes loadingPulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.7; }
-    }
-
-    @keyframes loadingFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50%       { transform: translateY(-10px) rotate(5deg); }
-    }
-
-    @keyframes loadingBar {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    /* ── Skip to content (Accessibilitat WCAG 2.1 AA — 2.4.1) ── */
+    /* Skip to content — WCAG 2.4.1 */
     .skip-to-content {
-      position: absolute;
+      position: fixed;
       top: -60px;
       left: 16px;
-      background: var(--color-turquesa);
+      background: #17A589;
       color: white;
       padding: 12px 20px;
       border-radius: 0 0 8px 8px;
-      font-family: var(--font-body);
       font-weight: 700;
       font-size: 0.9rem;
       text-decoration: none;
       z-index: 99999;
       transition: top 0.2s ease;
-      box-shadow: 0 4px 15px rgba(23,165,137,0.4);
     }
+    .skip-to-content:focus { top: 0; }
 
-    .skip-to-content:focus {
-      top: 0;
-      outline: 3px solid #E59866;
-      outline-offset: 2px;
-    }
-
-    /* Focus visible global (WCAG 2.1 AA — 2.4.7) */
+    /* Focus visible global — WCAG 2.4.7 */
     :focus-visible {
       outline: 2px solid #48C9B0;
       outline-offset: 3px;
@@ -248,105 +64,29 @@
 </head>
 
 <body>
-<!-- ═══════════════════════════════════════════
-     ACCESSIBILITAT: Skip navigation link
-     WCAG 2.1 AA — Criteri 2.4.1 (Bypass Blocks)
-     Permet als usuaris de teclat/lector de pantalla
-     saltar la navegació i anar directament al contingut
-═══════════════════════════════════════════ -->
-<a href="#main-content" class="skip-to-content">
-  Saltar al contingut principal
-</a>
-
-<!-- ═══════════════════════════════════════════
-     LOADING SCREEN
-     Visible mentre React carrega el bundle JS
-═══════════════════════════════════════════ -->
-<div id="app-loading" role="status" aria-label="Carregant TripNest..." aria-live="polite">
-  <div class="loading-icon" aria-hidden="true">🪺</div>
-  <div class="loading-logo">Trip<span>Nest</span></div>
-  <div class="loading-bar" aria-hidden="true">
-    <div class="loading-bar__fill"></div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     ARREL DE REACT
-     Tot el contingut dinàmic es renderitza aquí
-     WCAG 2.1 — <main> amb id per al skip link
-═══════════════════════════════════════════ -->
+<!-- Root de React — tot el contingut es renderitza aquí -->
 <div id="root"></div>
 
-<!-- ═══════════════════════════════════════════
-     NOSCRIPT — Fallback sense JavaScript
-     WCAG 2.1 — Accessibilitat sense JS
-═══════════════════════════════════════════ -->
+<!-- Fallback sense JavaScript — WCAG -->
 <noscript>
   <div style="
-        font-family: 'Lato', sans-serif;
-        background: linear-gradient(135deg, #0D2B45, #17A589);
-        color: white;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 40px 20px;
-        gap: 16px;
+        font-family:'Lato',sans-serif;
+        background:linear-gradient(135deg,#0D2B45,#17A589);
+        color:white; min-height:100vh;
+        display:flex; flex-direction:column;
+        align-items:center; justify-content:center;
+        text-align:center; padding:40px 20px; gap:16px;
       ">
-    <div style="font-size: 3rem;">🪺</div>
-    <h1 style="font-family: Georgia, serif; font-size: 2rem; font-weight: 900;">TripNest</h1>
-    <p style="font-size: 1rem; opacity: 0.85; max-width: 400px; line-height: 1.6;">
-      TripNest requereix JavaScript per funcionar correctament.
-      Si us plau, activa JavaScript al teu navegador i refresca la pàgina.
+    <div style="font-size:3rem">🪺</div>
+    <h1 style="font-family:Georgia,serif;font-size:2rem;font-weight:900">TripNest</h1>
+    <p style="opacity:0.85;max-width:400px;line-height:1.6">
+      TripNest requereix JavaScript per funcionar.<br/>
+      Activa'l al teu navegador i refresca la pàgina.
     </p>
-    <a href="https://enable-javascript.com/ca/" target="_blank" rel="noopener noreferrer"
-       style="color: #48C9B0; text-decoration: underline; font-size: 0.9rem;">
-      Com activar JavaScript →
-    </a>
   </div>
 </noscript>
 
-<!-- ═══════════════════════════════════════════
-     SCRIPT PRINCIPAL (Vite entry point)
-═══════════════════════════════════════════ -->
+<!-- Entry point de Vite/React -->
 <script type="module" src="/src/main.jsx"></script>
-
-<!-- ═══════════════════════════════════════════
-     AMAGAR LOADING SCREEN quan React munta
-═══════════════════════════════════════════ -->
-<script>
-  // Quan el DOM estigui llest, espera que React hagi muntat
-  // i amaga la pantalla de càrrega
-  (function () {
-    var loading = document.getElementById('app-loading');
-    var root    = document.getElementById('root');
-
-    if (!loading) return;
-
-    // Observa quan React insereix contingut al #root
-    var observer = new MutationObserver(function () {
-      if (root && root.children.length > 0) {
-        setTimeout(function () {
-          loading.classList.add('hidden');
-          // Elimina del DOM completament després de la transició
-          setTimeout(function () {
-            loading.remove();
-          }, 600);
-        }, 200);
-        observer.disconnect();
-      }
-    });
-
-    observer.observe(root, { childList: true });
-
-    // Fallback: amaga passat 4 segons en qualsevol cas
-    setTimeout(function () {
-      loading.classList.add('hidden');
-      observer.disconnect();
-    }, 4000);
-  })();
-</script>
 </body>
 </html>

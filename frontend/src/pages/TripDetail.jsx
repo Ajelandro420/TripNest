@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useAuth }   from '../../public/context/AuthContext.jsx'
+import { useAuth }   from '../context/AuthContext.jsx'
 import api           from '../api/axiosConfig'
 import TripChat      from '../components/TripChat'
 import './TripDetail.css'

@@ -1,18 +1,17 @@
 from pydantic import BaseModel
+from typing import Optional
+from app.schemas.user import UserOut
 
+class PromotionCreate(BaseModel):
+    msg_content: str
 
-class PromotionBase(BaseModel):
-    title: str
-    discount_percent: float
+class PromotionResponse(BaseModel):
+    id:          int
+    user_id:     int
+    msg_content: str
+    status:      str
+    user:        Optional[UserOut] = None
+    model_config = {"from_attributes": True}
 
-
-class PromotionCreate(PromotionBase):
-    trip_id: int
-
-
-class PromotionResponse(PromotionBase):
-    id: int
-    trip_id: int
-
-    class Config:
-        from_attributes = True
+class PromotionStatusUpdate(BaseModel):
+    status: str

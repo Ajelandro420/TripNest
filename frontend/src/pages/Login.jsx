@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../public/context/AuthContext.jsx'
+import { useAuth } from '../context/AuthContext'
 import api from '../api/axiosConfig'
 import './Login.css'
 
@@ -17,7 +17,6 @@ export default function Login() {
         setError('')
         setLoading(true)
         try {
-            // FastAPI OAuth2 espera FormData (x-www-form-urlencoded)
             const form = new FormData()
             form.append('username', email)
             form.append('password', password)
@@ -38,25 +37,38 @@ export default function Login() {
     }
 
     return (
-        <div className="tn-auth-page page-enter">
+        <div className="tn-auth-page">
             <div className="tn-auth-card">
-                {/* Header decoratiu */}
+
+                {/* Header */}
                 <div className="tn-auth-card__header" aria-hidden="true">
                     <span className="tn-auth-card__icon">🪺</span>
                 </div>
 
+                {/* Body */}
                 <div className="tn-auth-card__body">
                     <h1 className="tn-auth-card__title">Benvingut de nou</h1>
-                    <p className="tn-auth-card__subtitle">Inicia sessió per accedir als teus viatges</p>
+                    <p className="tn-auth-card__subtitle">
+                        Inicia sessió per accedir als teus viatges
+                    </p>
 
+                    {/* Error — role="alert" WCAG 4.1.3 */}
                     {error && (
-                        <div className="tn-alert tn-alert--error" role="alert" aria-live="assertive">
+                        <div
+                            className="tn-auth-alert tn-auth-alert--error"
+                            role="alert"
+                            aria-live="assertive"
+                        >
                             ⚠️ {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} noValidate aria-label="Formulari d'inici de sessió">
-                        <div className="tn-form-group">
+                    <form
+                        onSubmit={handleSubmit}
+                        noValidate
+                        aria-label="Formulari d'inici de sessió"
+                    >
+                        <div className="tn-auth-form-group">
                             <label htmlFor="login-email">Adreça de correu</label>
                             <input
                                 id="login-email"
@@ -70,7 +82,7 @@ export default function Login() {
                             />
                         </div>
 
-                        <div className="tn-form-group">
+                        <div className="tn-auth-form-group">
                             <label htmlFor="login-password">Contrasenya</label>
                             <input
                                 id="login-password"
@@ -86,13 +98,15 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="tn-btn tn-btn--primary tn-btn--full"
+                            className="tn-auth-submit"
                             disabled={loading}
                             aria-busy={loading}
                         >
                             {loading ? '⏳ Entrant...' : '🔑 Iniciar sessió'}
                         </button>
                     </form>
+
+                    <div className="tn-auth-divider"><span>o</span></div>
 
                     <p className="tn-auth-card__footer-text">
                         No tens compte?{' '}
@@ -102,8 +116,6 @@ export default function Login() {
                     </p>
                 </div>
             </div>
-
-            <style>{authStyles}</style>
         </div>
     )
 }

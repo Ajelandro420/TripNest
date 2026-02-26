@@ -1,4 +1,4 @@
-from .user import UserCreate, UserOut
-from .trip import TripCreate, TripResponse
-from .promotion import PromotionCreate, PromotionResponse
-from .chat import ChatCreate, ChatResponse
+from .user      import UserCreate, UserOut, UserUpdate, Token, UserRoleUpdate
+from .trip      import TripCreate, TripUpdate, TripResponse
+from .promotion import PromotionCreate, PromotionResponse, PromotionStatusUpdate
+from .message   import MessageCreate, MessageOut

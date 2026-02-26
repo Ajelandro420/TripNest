@@ -1,6 +1,6 @@
 // Profile.jsx
 import { useState } from 'react'
-import { useAuth } from '../../public/context/AuthContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import api         from '../api/axiosConfig'
 import './Profile.css'
 
