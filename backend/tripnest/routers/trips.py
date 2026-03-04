@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-
 from tripnest.core.dependencies import get_db, get_current_user
 from tripnest.models.user import User
 from tripnest.models.trip import Trip
@@ -21,11 +20,7 @@ def get_trip(trip_id: int, db: Session = Depends(get_db), current_user: User = D
     return trip
 
 @router.post("/", response_model=TripResponse, status_code=201)
-def create_trip(
-        trip_data: TripCreate,
-        db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
-):
+def create_trip(trip_data: TripCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role not in ("creador", "admin"):
         raise HTTPException(status_code=403, detail="Only creators can create trips")
     trip = Trip(**trip_data.model_dump(), creator_id=current_user.id)
@@ -35,32 +30,20 @@ def create_trip(
     return trip
 
 @router.put("/{trip_id}", response_model=TripResponse)
-def update_trip(
-        trip_id: int,
-        trip_data: TripUpdate,
-        db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
-):
+def update_trip(trip_id: int, trip_data: TripUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
     if trip.creator_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Not authorized")
-    update_data = trip_data.model_dump(exclude_unset=True)
-    if "max_user_count" in update_data and update_data["max_user_count"] < trip.user_count:
-        raise HTTPException(status_code=400, detail=f"Cannot reduce below current participants ({trip.user_count})")
-    for key, value in update_data.items():
+    for key, value in trip_data.model_dump(exclude_unset=True).items():
         setattr(trip, key, value)
     db.commit()
     db.refresh(trip)
     return trip
 
 @router.delete("/{trip_id}", status_code=204)
-def delete_trip(
-        trip_id: int,
-        db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
-):
+def delete_trip(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
@@ -70,12 +53,8 @@ def delete_trip(
     db.delete(trip)
     db.commit()
 
-@router.post("/{trip_id}/enroll", status_code=200)
-def enroll(
-        trip_id: int,
-        db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
-):
+@router.post("/{trip_id}/enroll")
+def enroll(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
@@ -88,12 +67,8 @@ def enroll(
     db.commit()
     return {"detail": "Enrolled successfully"}
 
-@router.post("/{trip_id}/leave", status_code=200)
-def leave(
-        trip_id: int,
-        db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
-):
+@router.post("/{trip_id}/leave")
+def leave(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
@@ -102,4 +77,4 @@ def leave(
     trip.participants.remove(current_user)
     trip.user_count = max(0, trip.user_count - 1)
     db.commit()
-    return {"detail": "Left trip successfully"}
+    return {"detail": "Left successfully"}

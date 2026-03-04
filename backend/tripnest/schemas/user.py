@@ -1,9 +1,5 @@
 from pydantic import BaseModel, EmailStr
-
-
-class UserUpdate(BaseModel):
-    email: Optional[str] = None
-    password: Optional[str] = None
+from typing import Optional
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -15,10 +11,16 @@ class UserOut(BaseModel):
     email: EmailStr
     full_name: str
     role: str
+    bio: Optional[str] = None
+    model_config = {"from_attributes": True}
 
-    class Config:
-        orm_mode = True
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    bio: Optional[str] = None
 
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+class UserRoleUpdate(BaseModel):
+    role: str

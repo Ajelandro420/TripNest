@@ -1,17 +1,16 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
-class MessageBase(BaseModel):
+class MessageCreate(BaseModel):
     content: str
-
-class MessageCreate(MessageBase):
     trip_id: int
 
-class MessageOut(MessageBase):
+class MessageOut(BaseModel):
     id: int
-    created_at: datetime
+    content: str
+    timestamp: datetime
     user_id: int
     trip_id: int
-
-    class Config:
-        orm_mode = True
+    user_name: Optional[str] = None
+    model_config = {"from_attributes": True}
