@@ -1,7 +1,6 @@
 // AdminUsers.jsx
 import { useEffect, useState } from 'react'
 import api from '../../api/axiosConfig'
-import './Admin.css'
 
 export default function AdminUsers() {
     const [users,   setUsers]   = useState([])
@@ -65,7 +64,7 @@ export default function AdminUsers() {
                             </thead>
                             <tbody>
                             {users.map(u => {
-                                const st = ROL_STYLE[u.rol] || ROL_STYLE.viatger
+                                const st = ROL_STYLE[u.role] || ROL_STYLE.viatger
                                 return (
                                     <tr key={u.id}>
                                         <td style={{color:'var(--tn-text-muted)',fontSize:'0.82rem'}}>#{u.id}</td>
@@ -77,17 +76,17 @@ export default function AdminUsers() {
                             padding:'3px 10px', borderRadius:50,
                             fontSize:'0.75rem', fontWeight:700
                         }}>
-                          {u.rol}
+                          {u.role}
                         </span>
                                         </td>
                                         <td>
-                                            {u.rol !== 'admin' && (
+                                            {u.role !== 'admin' && (
                                                 <button
-                                                    className={`tn-btn tn-btn--sm ${u.rol==='viatger' ? 'tn-btn--turquesa' : 'tn-btn--outline'}`}
-                                                    onClick={()=>changeRole(u.id, u.rol, u.full_name)}
-                                                    aria-label={`Canviar rol de ${u.full_name}, actualmente ${u.rol}`}
+                                                    className={`tn-btn tn-btn--sm ${u.role==='viatger' ? 'tn-btn--turquesa' : 'tn-btn--outline'}`}
+                                                    onClick={()=>changeRole(u.id, u.role, u.full_name)}
+                                                    aria-label={`Canviar rol de ${u.full_name}, actualmente ${u.role}`}
                                                 >
-                                                    {u.rol === 'viatger' ? '⬆️ Promocionar' : '⬇️ Degradar'}
+                                                    {u.role === 'viatger' ? '⬆️ Promocionar' : '⬇️ Degradar'}
                                                 </button>
                                             )}
                                         </td>

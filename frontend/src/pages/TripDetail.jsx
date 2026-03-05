@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useAuth }   from '../context/AuthContext.jsx'
+import { useAuth }   from '../context/AuthContext'
 import api           from '../api/axiosConfig'
 import TripChat      from '../components/TripChat'
-import './TripDetail.css'
 
 export default function TripDetail() {
     const { id }  = useParams()
@@ -70,7 +69,7 @@ export default function TripDetail() {
         </div>
     )
 
-    const isOwnerOrAdmin = user?.rol === 'admin' || trip.creador?.id === user?.id
+    const isOwnerOrAdmin = user?.role === 'admin' || trip.creador?.id === user?.id
 
     return (
         <article className="page-enter" style={{padding:'48px 0'}}>
@@ -135,7 +134,7 @@ export default function TripDetail() {
 
                         {/* Accions */}
                         <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
-                            {user?.rol === 'viatger' && !enrolled && trip.estat === 'Planificant' && (
+                            {user?.role === 'viatger' && !enrolled && trip.estat === 'Planificant' && (
                                 <button className="tn-btn tn-btn--turquesa" onClick={handleEnroll}
                                         aria-label="Inscriure'm a aquest viatge">
                                     ✋ Inscriure's
