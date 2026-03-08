@@ -1,6 +1,6 @@
-// AdminUsers.jsx
 import { useEffect, useState } from 'react'
 import api from '../../api/axiosConfig'
+import './AdminUsers.css'
 
 export default function AdminUsers() {
     const [users,   setUsers]   = useState([])
@@ -19,8 +19,8 @@ export default function AdminUsers() {
         const newRole = currentRole === 'viatger' ? 'creador' : 'viatger'
         if (!window.confirm(`Canviar el rol de ${name} a "${newRole}"?`)) return
         try {
-            await api.put(`/admin/users/${userId}/promote/`, { rol: newRole })
-            setUsers(users.map(u => u.id === userId ? { ...u, rol: newRole } : u))
+            await api.put(`/admin/users/${userId}/role`, { role: newRole })
+            setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u))
             setMsg(`Rol de ${name} actualitzat a "${newRole}".`)
             setMsgType('success')
         } catch {
@@ -28,73 +28,76 @@ export default function AdminUsers() {
         }
     }
 
-    const ROL_STYLE = {
-        viatger: { bg:'rgba(93,173,226,0.12)', color:'#1A6FA8' },
-        creador: { bg:'rgba(23,165,137,0.12)', color:'#0E8A74' },
-        admin:   { bg:'rgba(229,152,102,0.15)', color:'#B7770D' },
-    }
-
     return (
-        <section className="page-enter" style={{padding:'48px 0'}}>
+        <section className="tn-admin page-enter">
             <div className="tn-container">
-                <h1 style={{marginBottom:8}}>👥 Gestió d'Usuaris</h1>
-                <p style={{marginBottom:32}}>Gestiona els rols de tots els membres de TripNest.</p>
+                <div className="tn-admin__header">
+                    <h1>👥 Gestió d'Usuaris</h1>
+                    <p>Gestiona els rols de tots els membres de TripNest.</p>
+                </div>
 
                 {msg && (
-                    <div className={`tn-alert tn-alert--${msgType}`} role="alert" style={{marginBottom:24}}>
-                        {msg}
-                        <button onClick={()=>setMsg('')} style={{marginLeft:'auto',background:'none',border:'none',cursor:'pointer'}}
-                                aria-label="Tancar missatge">✕</button>
+                    <div className={`tn-admin__alert tn-admin__alert--${msgType}`} role="alert">
+                        <span style={{flex:1}}>{msg}</span>
+                        <button onClick={()=>setMsg('')} style={{background:'none',border:'none',cursor:'pointer',fontSize:'1.1rem',color:'inherit'}}>✕</button>
                     </div>
                 )}
 
                 {loading ? (
-                    <div className="tn-spinner" role="status"><div className="tn-spinner__ring"/><p>Carregant...</p></div>
+                    <div className="tn-spinner"><div className="tn-spinner__ring"/><p>Carregant...</p></div>
                 ) : (
-                    <div style={{overflowX:'auto'}}>
-                        <table className="tn-table" aria-label="Taula d'usuaris">
-                            <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Nom</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Rol</th>
-                                <th scope="col">Acció</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {users.map(u => {
-                                const st = ROL_STYLE[u.role] || ROL_STYLE.viatger
-                                return (
+                    <div className="tn-admin__card">
+                        <div className="tn-admin__card-header">
+                            <span>👤 Membres registrats</span>
+                            <span className="tn-admin__count">{users.length} usuaris</span>
+                        </div>
+                        <div className="tn-admin__table-wrap">
+                            <table className="tn-admin__table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Usuari</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Acció</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {users.map(u => (
                                     <tr key={u.id}>
-                                        <td style={{color:'var(--tn-text-muted)',fontSize:'0.82rem'}}>#{u.id}</td>
-                                        <td style={{fontWeight:700}}>{u.full_name}</td>
-                                        <td style={{color:'var(--tn-text-sec)'}}>{u.email}</td>
+                                        <td><span className="tn-admin__id">#{String(u.id).padStart(3,'0')}</span></td>
                                         <td>
-                        <span style={{
-                            background:st.bg, color:st.color,
-                            padding:'3px 10px', borderRadius:50,
-                            fontSize:'0.75rem', fontWeight:700
-                        }}>
+                                            <div className="tn-admin__name-cell">
+                                                <div className="tn-admin__avatar">
+                                                    {u.full_name?.charAt(0).toUpperCase()}
+                                                </div>
+                                                <strong>{u.full_name}</strong>
+                                            </div>
+                                        </td>
+                                        <td style={{color:'#7f8c8d'}}>{u.email}</td>
+                                        <td>
+                        <span className={`tn-admin__role-badge tn-admin__role-badge--${u.role}`}>
                           {u.role}
                         </span>
                                         </td>
                                         <td>
                                             {u.role !== 'admin' && (
                                                 <button
-                                                    className={`tn-btn tn-btn--sm ${u.role==='viatger' ? 'tn-btn--turquesa' : 'tn-btn--outline'}`}
-                                                    onClick={()=>changeRole(u.id, u.role, u.full_name)}
-                                                    aria-label={`Canviar rol de ${u.full_name}, actualmente ${u.role}`}
+                                                    className={`tn-admin__action-btn ${u.role==='viatger' ? 'tn-admin__action-btn--promote' : 'tn-admin__action-btn--demote'}`}
+                                                    onClick={() => changeRole(u.id, u.role, u.full_name)}
                                                 >
                                                     {u.role === 'viatger' ? '⬆️ Promocionar' : '⬇️ Degradar'}
                                                 </button>
                                             )}
+                                            {u.role === 'admin' && (
+                                                <span style={{fontSize:'0.75rem',color:'#aab7c4'}}>—</span>
+                                            )}
                                         </td>
                                     </tr>
-                                )
-                            })}
-                            </tbody>
-                        </table>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 )}
             </div>

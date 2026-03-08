@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 import api from '../api/axiosConfig'
 import './PromotionForm.css'
 
@@ -8,202 +7,113 @@ const MIN_CHARS = 20
 const MAX_CHARS = 500
 
 export default function PromotionForm() {
-    const { user } = useAuth()
-    const [message, setMessage] = useState('')
-    const [success, setSuccess] = useState(false)
+    const [text,    setText]    = useState('')
     const [error,   setError]   = useState('')
+    const [success, setSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    const charsOk = message.trim().length >= MIN_CHARS
-    const pct     = Math.min((message.length / MAX_CHARS) * 100, 100)
+    const chars = text.length
+    const pct   = Math.min(100, Math.round((chars / MIN_CHARS) * 100))
+    const ready = chars >= MIN_CHARS && chars <= MAX_CHARS
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (!charsOk) { setError(`El missatge ha de tenir almenys ${MIN_CHARS} caràcters.`); return }
-        setLoading(true); setError('')
+        e.preventDefault(); setError('')
+        if (!ready) { setError(`Mínim ${MIN_CHARS} caràcters. Ara en tens ${chars}.`); return }
+        setLoading(true)
         try {
-            await api.post('/users/promote-request', { msg_content: message })
+            await api.post('/users/promote-request', { msg_content: text })
             setSuccess(true)
         } catch (err) {
-            const detail = err.response?.data?.detail
-            if (detail === 'You already have a pending request') {
-                setError('Ja tens una petició pendent. Espera que un administrador la revisi.')
-            } else if (detail === 'Only viatgers can request promotion') {
-                setError('Ja ets Creador o Administrador — no necessites promoció.')
-            } else {
-                setError('Error enviant la petició. Torna-ho a intentar.')
-            }
-        } finally {
-            setLoading(false)
-        }
+            const detail = err.response?.data?.detail || ''
+            if (detail.includes('pending'))  setError('Ja tens una petició pendent. Espera la resolució.')
+            else if (detail.includes('creator')) setError('Ja ets Creador de Viatges!')
+            else setError(detail || 'Error enviant la petició.')
+        } finally { setLoading(false) }
     }
 
-    /* ── PANTALLA ÈXIT ── */
     if (success) return (
-        <div className="tn-promo page-enter">
-            <div className="tn-container">
-                <div className="tn-promo__success">
-                    <div className="tn-promo__success-card">
-                        <span className="tn-promo__success-icon">📬</span>
-                        <h2 className="tn-promo__success-title">Petició enviada!</h2>
-                        <p className="tn-promo__success-text">
-                            Un administrador revisarà la teva sol·licitud aviat.<br/>
-                            Rebràs accés a crear viatges quan s'aprovi.
-                        </p>
-                        <button
-                            className="tn-btn tn-btn--primary tn-btn--full"
-                            onClick={() => navigate('/dashboard')}
-                        >
-                            Tornar als Viatges
+        <section className="tn-promo page-enter">
+            <div className="tn-container" style={{maxWidth:560}}>
+                <div className="tn-promo__card">
+                    <div className="tn-promo__success">
+                        <span className="tn-promo__success-icon">🎉</span>
+                        <h2>Petició enviada!</h2>
+                        <p>El nostre equip revisarà la teva sol·licitud i et notificarem quan sigui aprovada. Mentrestant, continua explorant els viatges disponibles.</p>
+                        <button className="tn-promo__success-btn" onClick={() => navigate('/dashboard')}>
+                            🗺️ Explorar viatges
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     )
 
     return (
-        <div className="tn-promo page-enter">
-            <div className="tn-container">
+        <section className="tn-promo page-enter">
+            <div className="tn-container" style={{maxWidth:600}}>
 
-                {/* Header */}
-                <div className="tn-promo__header">
-                    <h1 className="tn-promo__title">⬆️ Demanar promoció a Creador</h1>
-                    <p className="tn-promo__subtitle">
-                        Explica'ns per què vols crear viatges a TripNest i et donarem accés en 24-48h.
-                    </p>
+                <div className="tn-promo__hero">
+                    <span className="tn-promo__icon">🚀</span>
+                    <h1>Converteix-te en Creador</h1>
+                    <p>Explica'ns per què vols crear i organitzar viatges a TripNest. Com més detallada sigui la teva motivació, millor!</p>
                 </div>
 
-                {/* Info banner */}
-                <div className="tn-promo__info">
-                    <span className="tn-promo__info-icon">✈️</span>
-                    <p className="tn-promo__info-text">
-                        Com a <strong>Creador</strong> podràs publicar viatges, gestionar participants
-                        i utilitzar el xat en temps real. Ara ets <strong>Viatger</strong> — {user?.full_name}.
-                    </p>
-                </div>
-
-                {/* Error */}
-                {error && (
-                    <div
-                        className="tn-auth-alert tn-auth-alert--error"
-                        role="alert" aria-live="assertive"
-                        style={{maxWidth: 620, marginBottom: 20}}
-                    >
-                        ⚠️ {error}
+                {/* Steps */}
+                <div className="tn-promo__steps">
+                    <div className="tn-promo__step">
+                        <span className="tn-promo__step-icon">✍️</span>
+                        <h3>Escriu la petició</h3>
+                        <p>Explica la teva motivació per organitzar viatges</p>
                     </div>
-                )}
+                    <div className="tn-promo__step">
+                        <span className="tn-promo__step-icon">👀</span>
+                        <h3>Revisió admin</h3>
+                        <p>L'equip TripNest revisarà la teva sol·licitud</p>
+                    </div>
+                    <div className="tn-promo__step">
+                        <span className="tn-promo__step-icon">✅</span>
+                        <h3>Accés complet</h3>
+                        <p>Crea i gestiona els teus propis viatges</p>
+                    </div>
+                </div>
 
-                {/* Card formulari */}
+                {/* Formulari */}
                 <div className="tn-promo__card">
-                    <form onSubmit={handleSubmit} noValidate aria-label="Formulari de petició de promoció">
+                    <div className="tn-promo__card-header">
+                        <span>📝 La teva motivació</span>
+                    </div>
+                    <form className="tn-promo__form" onSubmit={handleSubmit} noValidate>
 
-                        <div className="tn-promo-form-group">
-                            <label htmlFor="promo-msg">
-                                Per què vols ser Creador de Viatges?
-                            </label>
+                        {error && <div className="tn-promo__alert tn-promo__alert--error" role="alert">{error}</div>}
+
+                        <div className="tn-promo__field">
+                            <label htmlFor="promo-text">Per què vols ser Creador de Viatges?</label>
                             <textarea
-                                id="promo-msg"
-                                value={message}
-                                onChange={e => setMessage(e.target.value.slice(0, MAX_CHARS))}
-                                placeholder="Explica la teva experiència viatjant, els destins que t'interessen, com planificaràs els viatges i per què series un bon creador..."
-                                required
-                                aria-required="true"
-                                aria-describedby="promo-counter"
+                                id="promo-text"
+                                className="tn-promo__textarea"
+                                value={text}
+                                onChange={e => setText(e.target.value.slice(0, MAX_CHARS))}
+                                placeholder="Ex: M'apassionen els viatges i vull compartir experiències úniques amb altres persones. Tinc experiència organitzant excursions i m'agradaria..."
                             />
-
-                            {/* Barra de progrés */}
-                            <div style={{marginTop: 8}}>
-                                <div style={{
-                                    height: 4,
-                                    background: 'rgba(26,82,118,0.1)',
-                                    borderRadius: 2,
-                                    overflow: 'hidden',
-                                    marginBottom: 6
-                                }}>
-                                    <div style={{
-                                        height: '100%',
-                                        width: `${pct}%`,
-                                        borderRadius: 2,
-                                        background: charsOk
-                                            ? 'linear-gradient(90deg, #17A589, #48C9B0)'
-                                            : 'linear-gradient(90deg, #E59866, #F5CBA7)',
-                                        transition: 'width 0.3s ease, background 0.3s ease'
-                                    }} />
-                                </div>
-                                <div
-                                    id="promo-counter"
-                                    className={`tn-promo__char-count ${charsOk ? 'tn-promo__char-count--ok' : ''}`}
-                                    aria-live="polite"
-                                >
-                                    {charsOk
-                                        ? `✅ ${message.length}/${MAX_CHARS} caràcters`
-                                        : `${message.length}/${MIN_CHARS} mínims requerits`
-                                    }
-                                </div>
+                            <div className="tn-promo__progress">
+                                <div className="tn-promo__progress-fill" style={{
+                                    width: `${pct}%`,
+                                    background: ready ? '#17A589' : chars > 0 ? '#E67E22' : '#ddd'
+                                }}/>
+                            </div>
+                            <div className={`tn-promo__char-count ${ready ? 'tn-promo__char-count--ok' : chars > 0 ? 'tn-promo__char-count--warn' : ''}`}>
+                                {chars}/{MAX_CHARS} {chars < MIN_CHARS ? `— mínim ${MIN_CHARS - chars} caràcters més` : '✓'}
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            className="tn-btn tn-btn--primary tn-btn--full"
-                            disabled={loading || !charsOk}
-                            aria-busy={loading}
-                            style={{marginTop: 8}}
-                        >
-                            {loading ? '⏳ Enviant...' : '📤 Enviar petició'}
+                        <button type="submit" className="tn-promo__btn" disabled={loading || !ready}>
+                            {loading ? '⏳ Enviant...' : '🚀 Enviar petició'}
                         </button>
 
-                        {!charsOk && message.length > 0 && (
-                            <p style={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
-                                color: 'var(--tn-text-muted)',
-                                marginTop: 8
-                            }}>
-                                Falten {MIN_CHARS - message.trim().length} caràcters més
-                            </p>
-                        )}
                     </form>
                 </div>
-
-                {/* Què passa després */}
-                <div style={{
-                    maxWidth: 620,
-                    marginTop: 24,
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: 14
-                }}>
-                    {[
-                        { icon: '📤', step: '1', text: 'Envies la petició' },
-                        { icon: '👀', step: '2', text: 'Admin la revisa' },
-                        { icon: '✈️', step: '3', text: 'Crees viatges!' },
-                    ].map(({ icon, step, text }) => (
-                        <div key={step} style={{
-                            background: '#fff',
-                            border: '1px solid rgba(26,82,118,0.08)',
-                            borderRadius: 'var(--tn-r-md)',
-                            padding: '16px 12px',
-                            textAlign: 'center',
-                            boxShadow: 'var(--tn-shadow-sm)'
-                        }}>
-                            <div style={{ fontSize: '1.6rem', marginBottom: 6 }}>{icon}</div>
-                            <div style={{
-                                fontSize: '0.68rem',
-                                fontWeight: 700,
-                                textTransform: 'uppercase',
-                                color: 'var(--tn-turquesa)',
-                                marginBottom: 4,
-                                letterSpacing: '0.8px'
-                            }}>Pas {step}</div>
-                            <div style={{ fontSize: '0.82rem', color: 'var(--tn-text-sec)' }}>{text}</div>
-                        </div>
-                    ))}
-                </div>
-
             </div>
-        </div>
+        </section>
     )
 }

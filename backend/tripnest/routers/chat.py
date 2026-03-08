@@ -101,11 +101,11 @@ def send_message(
     }
 
 
-@router.websocket("/ws/trips/{trip_id}/chat")
+@router.websocket("/{trip_id}/ws")
 async def websocket_chat(trip_id: int, ws: WebSocket, token: str, db: Session = Depends(get_db)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id = payload.get("sub")
+        user_id = int(payload.get("sub"))
     except JWTError:
         await ws.close(code=1008)
         return
