@@ -12,22 +12,48 @@ from tripnest.models.message import Message
 from tripnest.models.trip import Trip
 from tripnest.models.user import User
 
+# Crear un enrutador para las rutas relacionadas con el chat
 router = APIRouter(prefix="/trips", tags=["Chat"])
 
 
 class ConnectionManager:
+    """
+    Clase para gestionar las conexiones WebSocket activas por viaje.
+    """
+
     def __init__(self):
         self.active: dict[int, list[WebSocket]] = {}
 
     async def connect(self, trip_id: int, ws: WebSocket):
+        """
+        Acepta una nueva conexión WebSocket y la asocia a un viaje.
+
+        Args:
+            trip_id (int): ID del viaje.
+            ws (WebSocket): Conexión WebSocket.
+        """
         await ws.accept()
         self.active.setdefault(trip_id, []).append(ws)
 
     def disconnect(self, trip_id: int, ws: WebSocket):
+        """
+        Desconecta un WebSocket de un viaje.
+
+        Args:
+            trip_id (int): ID del viaje.
+            ws (WebSocket): Conexión WebSocket.
+        """
         if trip_id in self.active and ws in self.active[trip_id]:
             self.active[trip_id].remove(ws)
 
     async def broadcast(self, trip_id: int, message: dict):
+        """
+        Envía un mensaje a todos los WebSockets conectados a un viaje.
+
+        Args:
+            trip_id (int): ID del viaje.
+            message (dict): Mensaje a enviar.
+        """
         for ws in list(self.active.get(trip_id, [])):
             try:
                 await ws.send_text(json.dumps(message, default=str))
@@ -39,6 +65,16 @@ manager = ConnectionManager()
 
 
 def _can_access_trip_chat(trip: Trip, user: User) -> bool:
+    """
+    Verifica si un usuario tiene acceso al chat de un viaje.
+
+    Args:
+        trip (Trip): Objeto del viaje.
+        user (User): Objeto del usuario.
+
+    Returns:
+        bool: True si el usuario tiene acceso, False en caso contrario.
+    """
     is_participant = any(p.id == user.id for p in trip.participants)
     is_owner_or_admin = trip.creator_id == user.id or user.role == "admin"
     return is_participant or is_owner_or_admin
@@ -50,6 +86,20 @@ def get_messages(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Obtiene los mensajes del chat de un viaje.
+
+    Args:
+        trip_id (int): ID del viaje.
+        db (Session): Sesión de base de datos.
+        current_user (User): Usuario actual.
+
+    Returns:
+        list: Lista de mensajes del chat.
+
+    Raises:
+        HTTPException: Si el viaje no existe o el usuario no tiene acceso.
+    """
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
@@ -78,6 +128,21 @@ def send_message(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Envía un mensaje al chat de un viaje.
+
+    Args:
+        trip_id (int): ID del viaje.
+        payload (dict): Contenido del mensaje.
+        db (Session): Sesión de base de datos.
+        current_user (User): Usuario actual.
+
+    Returns:
+        dict: Información del mensaje enviado.
+
+    Raises:
+        HTTPException: Si el viaje no existe, el usuario no tiene acceso o el mensaje está vacío.
+    """
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
@@ -103,6 +168,15 @@ def send_message(
 
 @router.websocket("/{trip_id}/ws")
 async def websocket_chat(trip_id: int, ws: WebSocket, token: str, db: Session = Depends(get_db)):
+    """
+    Maneja la conexión WebSocket para el chat de un viaje.
+
+    Args:
+        trip_id (int): ID del viaje.
+        ws (WebSocket): Conexión WebSocket.
+        token (str): Token de autenticación.
+        db (Session): Sesión de base de datos.
+    """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = int(payload.get("sub"))
