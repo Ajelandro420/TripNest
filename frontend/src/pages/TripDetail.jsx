@@ -1,18 +1,64 @@
+// ══════════════════════════════════════════
+// TripDetail.jsx — Detall del viatge amb
+// comptador de dies, toast i DestinationInfo
+// ══════════════════════════════════════════
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../components/Toast'
 import api from '../api/axiosConfig'
 import TripChat from '../components/TripChat'
+import DestinationInfo from '../components/DestinationInfo'
 import './TripDetail.css'
+
+// ── Comptador de dies ──────────────────────
+function DaysCounter({ startDate, endDate }) {
+    const now   = new Date()
+    const start = new Date(startDate)
+    const end   = new Date(endDate)
+    const msDay = 1000 * 60 * 60 * 24
+
+    if (now < start) {
+        const dies = Math.ceil((start - now) / msDay)
+        return (
+            <div className="tn-detail__days-counter tn-detail__days-counter--upcoming">
+                <span className="tn-detail__days-num">{dies}</span>
+                <span className="tn-detail__days-label">
+                    {dies === 1 ? 'dia per al viatge' : 'dies per al viatge'} 🚀
+                </span>
+            </div>
+        )
+    }
+    if (now >= start && now <= end) {
+        const dies = Math.ceil((end - now) / msDay)
+        return (
+            <div className="tn-detail__days-counter tn-detail__days-counter--active">
+                <span className="tn-detail__days-num">{dies}</span>
+                <span className="tn-detail__days-label">
+                    {dies === 1 ? 'dia restant' : 'dies restants'} · En curs 🟢
+                </span>
+            </div>
+        )
+    }
+    const dies = Math.floor((now - end) / msDay)
+    return (
+        <div className="tn-detail__days-counter tn-detail__days-counter--past">
+            <span className="tn-detail__days-num">{dies}</span>
+            <span className="tn-detail__days-label">
+                {dies === 1 ? 'dia des que va acabar' : 'dies des que va acabar'} 🏁
+            </span>
+        </div>
+    )
+}
 
 export default function TripDetail() {
     const { id }   = useParams()
     const { user } = useAuth()
     const navigate = useNavigate()
+    const toast    = useToast()
+
     const [trip,     setTrip]     = useState(null)
     const [enrolled, setEnrolled] = useState(false)
-    const [msg,      setMsg]      = useState('')
-    const [msgType,  setMsgType]  = useState('success')
     const [loading,  setLoading]  = useState(true)
 
     useEffect(() => {
@@ -21,20 +67,18 @@ export default function TripDetail() {
                 setTrip(res.data)
                 setEnrolled(res.data.participants?.some(p => p.id === user?.id))
             })
-            .catch(() => setMsg('Error carregant el viatge.'))
+            .catch(() => toast.error('Error carregant el viatge.'))
             .finally(() => setLoading(false))
     }, [id])
-
-    const notify = (text, type = 'success') => { setMsg(text); setMsgType(type) }
 
     const handleEnroll = async () => {
         try {
             await api.post(`/trips/${id}/enroll`)
             setEnrolled(true)
             setTrip(t => ({ ...t, user_count: t.user_count + 1 }))
-            notify("✅ T'has inscrit correctament!")
+            toast.success("T'has inscrit correctament!")
         } catch (err) {
-            notify(err.response?.data?.detail || 'Error en la inscripció.', 'error')
+            toast.error(err.response?.data?.detail || 'Error en la inscripció.')
         }
     }
 
@@ -44,16 +88,21 @@ export default function TripDetail() {
             await api.post(`/trips/${id}/leave`)
             setEnrolled(false)
             setTrip(t => ({ ...t, user_count: Math.max(0, t.user_count - 1) }))
-            notify("👋 T'has desinscrit del viatge.")
-        } catch { notify('Error en la desinscripció.', 'error') }
+            toast.info("T'has desinscrit del viatge.")
+        } catch {
+            toast.error('Error en la desinscripció.')
+        }
     }
 
     const handleDelete = async () => {
         if (!window.confirm('Segur que vols eliminar aquest viatge? No es pot desfer.')) return
         try {
             await api.delete(`/trips/${id}`)
+            toast.success('Viatge eliminat correctament.')
             navigate('/dashboard')
-        } catch { notify('Error eliminant el viatge.', 'error') }
+        } catch {
+            toast.error('Error eliminant el viatge.')
+        }
     }
 
     if (loading) return (
@@ -66,14 +115,16 @@ export default function TripDetail() {
         <div style={{textAlign:'center',padding:'80px 16px'}}>
             <div style={{fontSize:'3rem',marginBottom:16}}>😕</div>
             <h2>Viatge no trobat</h2>
-            <button className="tn-detail__btn tn-detail__btn--edit" onClick={() => navigate('/dashboard')} style={{margin:'16px auto',display:'inline-flex'}}>
+            <button className="tn-detail__btn tn-detail__btn--edit"
+                    onClick={() => navigate('/dashboard')}
+                    style={{margin:'16px auto',display:'inline-flex'}}>
                 ← Tornar al Dashboard
             </button>
         </div>
     )
 
     const isOwnerOrAdmin = user?.role === 'admin' || trip.creator_id === user?.id
-    const pct = trip.max_user_count > 0
+    const pct  = trip.max_user_count > 0
         ? Math.min(100, Math.round((trip.user_count / trip.max_user_count) * 100)) : 0
     const full = pct >= 100
 
@@ -89,13 +140,6 @@ export default function TripDetail() {
         <article className="tn-detail page-enter">
             <div className="tn-container">
 
-                {msg && (
-                    <div className={`tn-detail__alert tn-detail__alert--${msgType}`} role="alert">
-                        <span style={{flex:1}}>{msg}</span>
-                        <button onClick={()=>setMsg('')} style={{background:'none',border:'none',cursor:'pointer',fontSize:'1.1rem',color:'inherit'}} aria-label="Tancar">✕</button>
-                    </div>
-                )}
-
                 {/* Capçalera */}
                 <div className="tn-detail__header">
                     <div>
@@ -107,14 +151,18 @@ export default function TripDetail() {
                         </div>
                     </div>
                     <span className="tn-detail__status" style={{background:estat.bg, color:estat.color}}>
-            {trip.status}
-          </span>
+                        {trip.status}
+                    </span>
                 </div>
+
+                {/* Comptador de dies */}
+                {trip.start_date && trip.end_date && (
+                    <DaysCounter startDate={trip.start_date} endDate={trip.end_date} />
+                )}
 
                 <div className="tn-detail__grid">
                     {/* Columna esquerra */}
                     <div>
-                        {/* Descripció */}
                         <div className="tn-detail__card">
                             <div className="tn-detail__card-header">
                                 <span>📖 Sobre el viatge</span>
@@ -124,7 +172,7 @@ export default function TripDetail() {
                                     {trip.description || 'Sense descripció disponible.'}
                                 </p>
 
-                                {/* Participants */}
+                                {/* Barra participants */}
                                 <div className="tn-detail__participants">
                                     <div className={`tn-detail__pax-row ${full ? 'tn-detail__pax-row--full' : ''}`}>
                                         <span>👥 Participants</span>
@@ -132,7 +180,7 @@ export default function TripDetail() {
                                     </div>
                                     <div className="tn-detail__bar">
                                         <div className="tn-detail__bar-fill" style={{
-                                            width: `${pct}%`,
+                                            width:`${pct}%`,
                                             background: full
                                                 ? 'linear-gradient(90deg,#E74C3C,#C0392B)'
                                                 : 'linear-gradient(90deg,#17A589,#48C9B0)'
@@ -166,6 +214,9 @@ export default function TripDetail() {
                                 </>
                             )}
                         </div>
+
+                        {/* Info destí — fotos, mapa, temps */}
+                        <DestinationInfo destination={trip.destination} />
                     </div>
 
                     {/* Columna dreta: Xat */}

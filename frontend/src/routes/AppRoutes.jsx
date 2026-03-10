@@ -13,6 +13,7 @@ import Profile       from '../pages/Profile'
 import PromotionForm from '../pages/PromotionForm'
 import AdminUsers    from '../pages/admin/AdminUsers'
 import AdminRequests from '../pages/admin/AdminRequests'
+import NotFound from '../pages/NotFound'
 
 /**
  * AppRoutes
@@ -100,6 +101,7 @@ export default function AppRoutes() {
                 - Cualquier ruta no definida redirige a "/" (home) usando replace para no dejar
                 - entradas en el historial del navegador. */}
             <Route path="*" element={<Navigate to="/" replace />} /> {/* Fallback: redirige a la home */}
+            <Route path="*" element={<NotFound />} />
         </Routes>
     )
 }

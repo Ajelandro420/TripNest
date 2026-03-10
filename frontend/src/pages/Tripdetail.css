@@ -213,3 +213,46 @@
     color: #C0392B;
     border: 1px solid rgba(231,76,60,0.2);
 }
+/* ── Afegir al final de TripDetail.css ── */
+
+.tn-detail__days-counter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    border: 1px solid transparent;
+}
+
+.tn-detail__days-counter--upcoming {
+    background: linear-gradient(135deg, rgba(23,165,137,0.08), rgba(72,201,176,0.06));
+    border-color: rgba(23,165,137,0.2);
+}
+
+.tn-detail__days-counter--active {
+    background: linear-gradient(135deg, rgba(46,204,113,0.08), rgba(23,165,137,0.06));
+    border-color: rgba(46,204,113,0.25);
+}
+
+.tn-detail__days-counter--past {
+    background: rgba(127,140,141,0.07);
+    border-color: rgba(127,140,141,0.15);
+}
+
+.tn-detail__days-num {
+    font-family: var(--font-display, 'Playfair Display', serif);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #0D2B45;
+    line-height: 1;
+    min-width: 60px;
+    text-align: center;
+}
+
+.tn-detail__days-label {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #5d6d7e;
+    line-height: 1.4;
+}

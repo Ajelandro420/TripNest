@@ -1,5 +1,6 @@
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
+import { ToastProvider } from './components/Toast'
 import Navbar    from './components/Layout/Navbar'
 import Footer    from './components/Layout/Footer'
 import AppRoutes from './routes/AppRoutes'
@@ -44,21 +45,21 @@ function AppSkeleton() {
                 }} />
             </div>
             <style>{`
-        @keyframes spin {
-          0%   { transform: rotate(0deg) scale(1); }
-          50%  { transform: rotate(180deg) scale(1.1); }
-          100% { transform: rotate(360deg) scale(1); }
-        }
-        @keyframes shimmer {
-          0%   { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-      `}</style>
+                @keyframes spin {
+                    0%   { transform: rotate(0deg) scale(1); }
+                    50%  { transform: rotate(180deg) scale(1.1); }
+                    100% { transform: rotate(360deg) scale(1); }
+                }
+                @keyframes shimmer {
+                    0%   { background-position: 200% 0; }
+                    100% { background-position: -200% 0; }
+                }
+            `}</style>
         </div>
     )
 }
 
-/* ── Inner tripnest que espera que AuthContext estigui llest ── */
+/* ── Inner que espera que AuthContext estigui llest ── */
 function AppInner() {
     const { loading } = useAuth()
 
@@ -82,7 +83,9 @@ export default function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
-                <AppInner />
+                <ToastProvider>
+                    <AppInner />
+                </ToastProvider>
             </BrowserRouter>
         </AuthProvider>
     )
