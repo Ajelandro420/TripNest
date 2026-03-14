@@ -1,7 +1,6 @@
-// src/context/AuthContext.jsx
-import { createContext, useState, useContext } from 'react'
-
-const AuthContext = createContext()
+// Contexto de autenticacion: guarda usuario/token y expone login/logout.
+import { useState } from 'react'
+import AuthContext from './auth-context'
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null)
@@ -28,4 +27,4 @@ export function AuthProvider({ children }) {
     )
 }
 
-export const useAuth = () => useContext(AuthContext)
+

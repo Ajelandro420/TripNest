@@ -1,65 +1,24 @@
+// Estructura general: proveedores globales, navbar/footer y rutas principales.
 import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider, useAuth } from './context/AuthContext'
+import { AuthProvider } from './context/AuthContext'
+import useAuth from './context/useAuth'
 import { ToastProvider } from './components/Toast'
-import Navbar    from './components/Layout/Navbar'
-import Footer    from './components/Layout/Footer'
+import Navbar from './components/Layout/Navbar'
+import Footer from './components/Layout/Footer'
 import AppRoutes from './routes/AppRoutes'
 
-/* ── Spinner mentre AuthContext verifica el token ── */
 function AppSkeleton() {
     return (
-        <div style={{
-            position: 'fixed',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '16px',
-            background: 'linear-gradient(135deg, #0D2B45 0%, #1A5276 50%, #17A589 100%)',
-            zIndex: 9999,
-        }}>
-            <span style={{ fontSize: '2.8rem', animation: 'spin 1s linear infinite' }}>🪺</span>
-            <p style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: '1.6rem',
-                fontWeight: 900,
-                color: '#fff',
-                margin: 0,
-            }}>
-                Trip<span style={{ color: '#48C9B0' }}>Nest</span>
+        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-3 bg-primary z-3">
+            <div className="spinner-border text-light" role="status" aria-label="Carregant aplicacio" />
+            <p className="h4 text-white fw-bold mb-0">
+                Trip<span className="text-info">Nest</span>
             </p>
-            <div style={{
-                width: '160px',
-                height: '3px',
-                background: 'rgba(255,255,255,0.15)',
-                borderRadius: '2px',
-                overflow: 'hidden',
-            }}>
-                <div style={{
-                    height: '100%',
-                    background: 'linear-gradient(90deg, #48C9B0, #E59866, #48C9B0)',
-                    backgroundSize: '200% 100%',
-                    animation: 'shimmer 1.4s ease-in-out infinite',
-                    borderRadius: '2px',
-                }} />
-            </div>
-            <style>{`
-                @keyframes spin {
-                    0%   { transform: rotate(0deg) scale(1); }
-                    50%  { transform: rotate(180deg) scale(1.1); }
-                    100% { transform: rotate(360deg) scale(1); }
-                }
-                @keyframes shimmer {
-                    0%   { background-position: 200% 0; }
-                    100% { background-position: -200% 0; }
-                }
-            `}</style>
+            <p className="small text-light mb-0">Inicialitzant sessio...</p>
         </div>
     )
 }
 
-/* ── Inner que espera que AuthContext estigui llest ── */
 function AppInner() {
     const { loading } = useAuth()
 
@@ -67,11 +26,11 @@ function AppInner() {
 
     return (
         <>
-            <a href="#main-content" className="skip-to-content">
+            <a href="#main-content" className="visually-hidden-focusable position-absolute top-0 start-0 m-2 p-2 bg-light border rounded">
                 Saltar al contingut principal
             </a>
             <Navbar />
-            <main id="main-content">
+            <main id="main-content" className="pt-5 mt-3">
                 <AppRoutes />
             </main>
             <Footer />
@@ -90,3 +49,4 @@ export default function App() {
         </AuthProvider>
     )
 }
+

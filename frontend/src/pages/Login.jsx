@@ -1,16 +1,16 @@
+// Login: valida formulario, pide token y redirige.
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import useAuth from '../context/useAuth'
 import api from '../api/axiosConfig'
-import './Login.css'
 
 export default function Login() {
-    const [email,    setEmail]    = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error,    setError]    = useState('')
-    const [loading,  setLoading]  = useState(false)
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
     const { login } = useAuth()
-    const navigate  = useNavigate()
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -25,7 +25,7 @@ export default function Login() {
             const token = data.access_token
 
             const me = await api.get('/users/me', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             })
             login(token, me.data)
             navigate('/dashboard')
@@ -37,85 +37,66 @@ export default function Login() {
     }
 
     return (
-        <div className="tn-auth-page">
-            <div className="tn-auth-card">
+        <section className="py-5">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-md-8 col-lg-6">
+                        <div className="card shadow-sm border-0">
+                            <div className="card-body p-4 p-md-5">
+                                <h1 className="h3 mb-2 text-center">Benvingut de nou</h1>
+                                <p className="text-secondary text-center mb-4">Inicia sessio per accedir als teus viatges</p>
 
-                {/* Header */}
-                <div className="tn-auth-card__header" aria-hidden="true">
-                    <span className="tn-auth-card__icon">🪺</span>
-                </div>
+                                {error && (
+                                    <div className="alert alert-danger" role="alert" aria-live="assertive">
+                                        {error}
+                                    </div>
+                                )}
 
-                {/* Body */}
-                <div className="tn-auth-card__body">
-                    <h1 className="tn-auth-card__title">Benvingut de nou</h1>
-                    <p className="tn-auth-card__subtitle">
-                        Inicia sessió per accedir als teus viatges
-                    </p>
+                                <form onSubmit={handleSubmit} noValidate aria-label="Formulari d'inici de sessio">
+                                    <div className="mb-3">
+                                        <label htmlFor="login-email" className="form-label">Adreca de correu</label>
+                                        <input
+                                            id="login-email"
+                                            type="email"
+                                            className="form-control"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="nom@example.com"
+                                            required
+                                            autoComplete="email"
+                                        />
+                                    </div>
 
-                    {/* Error — role="alert" WCAG 4.1.3 */}
-                    {error && (
-                        <div
-                            className="tn-auth-alert tn-auth-alert--error"
-                            role="alert"
-                            aria-live="assertive"
-                        >
-                            ⚠️ {error}
+                                    <div className="mb-3">
+                                        <label htmlFor="login-password" className="form-label">Contrasenya</label>
+                                        <input
+                                            id="login-password"
+                                            type="password"
+                                            className="form-control"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            placeholder="La teva contrasenya"
+                                            required
+                                            autoComplete="current-password"
+                                        />
+                                    </div>
+
+                                    <button type="submit" className="btn btn-primary w-100" disabled={loading} aria-busy={loading}>
+                                        {loading ? 'Entrant...' : 'Iniciar sessio'}
+                                    </button>
+                                </form>
+
+                                <p className="text-center mt-4 mb-0 text-secondary">
+                                    No tens compte? <Link to="/register">Registra't gratis</Link>
+                                </p>
+                            </div>
                         </div>
-                    )}
-
-                    <form
-                        onSubmit={handleSubmit}
-                        noValidate
-                        aria-label="Formulari d'inici de sessió"
-                    >
-                        <div className="tn-auth-form-group">
-                            <label htmlFor="login-email">Adreça de correu</label>
-                            <input
-                                id="login-email"
-                                type="email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                placeholder="nom@example.com"
-                                required
-                                autoComplete="email"
-                                aria-required="true"
-                            />
-                        </div>
-
-                        <div className="tn-auth-form-group">
-                            <label htmlFor="login-password">Contrasenya</label>
-                            <input
-                                id="login-password"
-                                type="password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                placeholder="La teva contrasenya"
-                                required
-                                autoComplete="current-password"
-                                aria-required="true"
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="tn-auth-submit"
-                            disabled={loading}
-                            aria-busy={loading}
-                        >
-                            {loading ? '⏳ Entrant...' : '🔑 Iniciar sessió'}
-                        </button>
-                    </form>
-
-                    <div className="tn-auth-divider"><span>o</span></div>
-
-                    <p className="tn-auth-card__footer-text">
-                        No tens compte?{' '}
-                        <Link to="/register" className="tn-auth-card__link">
-                            Registra't gratis
-                        </Link>
-                    </p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
+
+
+

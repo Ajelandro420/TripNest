@@ -1,84 +1,75 @@
-// ══════════════════════════════════════════
-// TripDetail.jsx — Detall del viatge amb
-// comptador de dies, toast i DestinationInfo
-// ══════════════════════════════════════════
+// Detalle de viaje: acciones de inscripcion, estado y chat.
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import { useToast } from '../components/Toast'
+import { useNavigate, useParams } from 'react-router-dom'
+import useAuth from '../context/useAuth'
+import useToast from '../components/useToast'
 import api from '../api/axiosConfig'
 import TripChat from '../components/TripChat'
 import DestinationInfo from '../components/DestinationInfo'
-import './TripDetail.css'
 
-// ── Comptador de dies ──────────────────────
 function DaysCounter({ startDate, endDate }) {
-    const now   = new Date()
+    const now = new Date()
     const start = new Date(startDate)
-    const end   = new Date(endDate)
+    const end = new Date(endDate)
     const msDay = 1000 * 60 * 60 * 24
 
     if (now < start) {
-        const dies = Math.ceil((start - now) / msDay)
-        return (
-            <div className="tn-detail__days-counter tn-detail__days-counter--upcoming">
-                <span className="tn-detail__days-num">{dies}</span>
-                <span className="tn-detail__days-label">
-                    {dies === 1 ? 'dia per al viatge' : 'dies per al viatge'} 🚀
-                </span>
-            </div>
-        )
+        const days = Math.ceil((start - now) / msDay)
+        return <div className="alert alert-info mb-3" role="status">{days} dia/es per al viatge</div>
     }
+
     if (now >= start && now <= end) {
-        const dies = Math.ceil((end - now) / msDay)
-        return (
-            <div className="tn-detail__days-counter tn-detail__days-counter--active">
-                <span className="tn-detail__days-num">{dies}</span>
-                <span className="tn-detail__days-label">
-                    {dies === 1 ? 'dia restant' : 'dies restants'} · En curs 🟢
-                </span>
-            </div>
-        )
+        const days = Math.ceil((end - now) / msDay)
+        return <div className="alert alert-success mb-3" role="status">{days} dia/es restants � en curs</div>
     }
-    const dies = Math.floor((now - end) / msDay)
-    return (
-        <div className="tn-detail__days-counter tn-detail__days-counter--past">
-            <span className="tn-detail__days-num">{dies}</span>
-            <span className="tn-detail__days-label">
-                {dies === 1 ? 'dia des que va acabar' : 'dies des que va acabar'} 🏁
-            </span>
-        </div>
-    )
+
+    const days = Math.floor((now - end) / msDay)
+    return <div className="alert alert-secondary mb-3" role="status">{days} dia/es des que va acabar</div>
+}
+
+const STATUS_MAP = {
+    Planificant: 'text-bg-primary',
+    Actiu: 'text-bg-success',
+    Completat: 'text-bg-secondary',
+    'Cancel�lat': 'text-bg-danger',
+}
+
+function widthClassFromPct(pct) {
+    if (pct <= 0) return ''
+    if (pct <= 25) return 'w-25'
+    if (pct <= 50) return 'w-50'
+    if (pct <= 75) return 'w-75'
+    return 'w-100'
 }
 
 export default function TripDetail() {
-    const { id }   = useParams()
+    const { id } = useParams()
     const { user } = useAuth()
     const navigate = useNavigate()
-    const toast    = useToast()
+    const toast = useToast()
 
-    const [trip,     setTrip]     = useState(null)
+    const [trip, setTrip] = useState(null)
     const [enrolled, setEnrolled] = useState(false)
-    const [loading,  setLoading]  = useState(true)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         api.get(`/trips/${id}`)
-            .then(res => {
+            .then((res) => {
                 setTrip(res.data)
-                setEnrolled(res.data.participants?.some(p => p.id === user?.id))
+                setEnrolled(res.data.participants?.some((p) => p.id === user?.id))
             })
             .catch(() => toast.error('Error carregant el viatge.'))
             .finally(() => setLoading(false))
-    }, [id])
+    }, [id, toast, user?.id])
 
     const handleEnroll = async () => {
         try {
             await api.post(`/trips/${id}/enroll`)
             setEnrolled(true)
-            setTrip(t => ({ ...t, user_count: t.user_count + 1 }))
-            toast.success("T'has inscrit correctament!")
+            setTrip((t) => ({ ...t, user_count: t.user_count + 1 }))
+            toast.success("T'has inscrit correctament")
         } catch (err) {
-            toast.error(err.response?.data?.detail || 'Error en la inscripció.')
+            toast.error(err.response?.data?.detail || 'Error en la inscripcio')
         }
     }
 
@@ -87,10 +78,10 @@ export default function TripDetail() {
         try {
             await api.post(`/trips/${id}/leave`)
             setEnrolled(false)
-            setTrip(t => ({ ...t, user_count: Math.max(0, t.user_count - 1) }))
-            toast.info("T'has desinscrit del viatge.")
+            setTrip((t) => ({ ...t, user_count: Math.max(0, t.user_count - 1) }))
+            toast.info("T'has desinscrit del viatge")
         } catch {
-            toast.error('Error en la desinscripció.')
+            toast.error('Error en la desinscripcio')
         }
     }
 
@@ -98,147 +89,107 @@ export default function TripDetail() {
         if (!window.confirm('Segur que vols eliminar aquest viatge? No es pot desfer.')) return
         try {
             await api.delete(`/trips/${id}`)
-            toast.success('Viatge eliminat correctament.')
+            toast.success('Viatge eliminat correctament')
             navigate('/dashboard')
         } catch {
-            toast.error('Error eliminant el viatge.')
+            toast.error('Error eliminant el viatge')
         }
     }
 
-    if (loading) return (
-        <div className="tn-spinner" role="status">
-            <div className="tn-spinner__ring"/><p>Carregant viatge...</p>
-        </div>
-    )
+    if (loading) {
+        return (
+            <section className="py-5">
+                <div className="container text-center">
+                    <div className="spinner-border text-primary" role="status" aria-label="Carregant viatge" />
+                </div>
+            </section>
+        )
+    }
 
-    if (!trip) return (
-        <div style={{textAlign:'center',padding:'80px 16px'}}>
-            <div style={{fontSize:'3rem',marginBottom:16}}>😕</div>
-            <h2>Viatge no trobat</h2>
-            <button className="tn-detail__btn tn-detail__btn--edit"
-                    onClick={() => navigate('/dashboard')}
-                    style={{margin:'16px auto',display:'inline-flex'}}>
-                ← Tornar al Dashboard
-            </button>
-        </div>
-    )
+    if (!trip) {
+        return (
+            <section className="py-5">
+                <div className="container text-center">
+                    <h2 className="h4 mb-3">Viatge no trobat</h2>
+                    <button type="button" className="btn btn-outline-primary" onClick={() => navigate('/dashboard')}>
+                        Tornar al dashboard
+                    </button>
+                </div>
+            </section>
+        )
+    }
 
     const isOwnerOrAdmin = user?.role === 'admin' || trip.creator_id === user?.id
-    const pct  = trip.max_user_count > 0
-        ? Math.min(100, Math.round((trip.user_count / trip.max_user_count) * 100)) : 0
+    const pct = trip.max_user_count > 0 ? Math.min(100, Math.round((trip.user_count / trip.max_user_count) * 100)) : 0
     const full = pct >= 100
 
-    const ESTAT_COLOR = {
-        Planificant:  { bg:'rgba(93,173,226,0.12)',  color:'#1A6FA8' },
-        Actiu:        { bg:'rgba(23,165,137,0.12)',   color:'#0E8A74' },
-        Completat:    { bg:'rgba(127,140,141,0.12)',  color:'#5D6D7E' },
-        'Cancel·lat': { bg:'rgba(231,76,60,0.1)',     color:'#C0392B' },
-    }
-    const estat = ESTAT_COLOR[trip.status] || ESTAT_COLOR.Planificant
-
     return (
-        <article className="tn-detail page-enter">
-            <div className="tn-container">
-
-                {/* Capçalera */}
-                <div className="tn-detail__header">
+        <section className="py-4 py-md-5">
+            <div className="container">
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                     <div>
-                        <h1 className="tn-detail__title">{trip.title}</h1>
-                        <div className="tn-detail__meta">
-                            <span className="tn-detail__meta-item">📍 {trip.destination}</span>
-                            <span className="tn-detail__meta-item">🗓️ {trip.start_date} → {trip.end_date}</span>
-                            <span className="tn-detail__meta-item">👥 {trip.user_count}/{trip.max_user_count} participants</span>
-                        </div>
+                        <h1 className="h3 mb-1">{trip.title}</h1>
+                        <p className="text-secondary mb-0">?? {trip.destination} � ?? {trip.start_date} ? {trip.end_date}</p>
                     </div>
-                    <span className="tn-detail__status" style={{background:estat.bg, color:estat.color}}>
-                        {trip.status}
-                    </span>
+                    <span className={`badge fs-6 ${STATUS_MAP[trip.status] || 'text-bg-primary'}`}>{trip.status}</span>
                 </div>
 
-                {/* Comptador de dies */}
-                {trip.start_date && trip.end_date && (
-                    <DaysCounter startDate={trip.start_date} endDate={trip.end_date} />
-                )}
+                {trip.start_date && trip.end_date && <DaysCounter startDate={trip.start_date} endDate={trip.end_date} />}
 
-                <div className="tn-detail__grid">
-                    {/* Columna esquerra */}
-                    <div>
-                        <div className="tn-detail__card">
-                            <div className="tn-detail__card-header">
-                                <span>📖 Sobre el viatge</span>
-                            </div>
-                            <div className="tn-detail__card-body">
-                                <p className="tn-detail__desc">
-                                    {trip.description || 'Sense descripció disponible.'}
-                                </p>
+                <div className="row g-4">
+                    <div className="col-12 col-lg-8">
+                        <div className="card border-0 shadow-sm mb-3">
+                            <div className="card-body">
+                                <h2 className="h5">Sobre el viatge</h2>
+                                <p className="text-secondary mb-3">{trip.description || 'Sense descripcio disponible.'}</p>
 
-                                {/* Barra participants */}
-                                <div className="tn-detail__participants">
-                                    <div className={`tn-detail__pax-row ${full ? 'tn-detail__pax-row--full' : ''}`}>
-                                        <span>👥 Participants</span>
-                                        <span>{trip.user_count} / {trip.max_user_count}{full && ' · Complet'}</span>
-                                    </div>
-                                    <div className="tn-detail__bar">
-                                        <div className="tn-detail__bar-fill" style={{
-                                            width:`${pct}%`,
-                                            background: full
-                                                ? 'linear-gradient(90deg,#E74C3C,#C0392B)'
-                                                : 'linear-gradient(90deg,#17A589,#48C9B0)'
-                                        }}/>
-                                    </div>
+                                <div className="d-flex justify-content-between small fw-semibold mb-1">
+                                    <span>Participants</span>
+                                    <span>{trip.user_count}/{trip.max_user_count}{full ? ' � Complet' : ''}</span>
+                                </div>
+                                <div className="progress mb-3" role="progressbar" aria-label="Percentatge ocupacio" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
+                                    <div className={`progress-bar ${full ? 'bg-danger' : 'bg-success'} ${widthClassFromPct(pct)}`} />
+                                </div>
+
+                                <div className="d-flex flex-wrap gap-2">
+                                    {!isOwnerOrAdmin && !enrolled && trip.status === 'Planificant' && !full && (
+                                        <button type="button" className="btn btn-success" onClick={handleEnroll}>Inscriure's</button>
+                                    )}
+                                    {!isOwnerOrAdmin && enrolled && (
+                                        <button type="button" className="btn btn-outline-secondary" onClick={handleLeave}>Desinscriure's</button>
+                                    )}
+                                    {isOwnerOrAdmin && (
+                                        <>
+                                            <button type="button" className="btn btn-outline-primary" onClick={() => navigate(`/trips/${id}/edit`)}>
+                                                Editar viatge
+                                            </button>
+                                            <button type="button" className="btn btn-outline-danger" onClick={handleDelete}>
+                                                Eliminar
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
 
-                        {/* Botons d'acció */}
-                        <div className="tn-detail__actions">
-                            {!isOwnerOrAdmin && !enrolled && trip.status === 'Planificant' && !full && (
-                                <button className="tn-detail__btn tn-detail__btn--enroll" onClick={handleEnroll}>
-                                    ✋ Inscriure's
-                                </button>
-                            )}
-                            {!isOwnerOrAdmin && enrolled && (
-                                <button className="tn-detail__btn tn-detail__btn--leave" onClick={handleLeave}>
-                                    🚪 Desinscriure's
-                                </button>
-                            )}
-                            {isOwnerOrAdmin && (
-                                <>
-                                    <button className="tn-detail__btn tn-detail__btn--edit"
-                                            onClick={() => navigate(`/trips/${id}/edit`)}>
-                                        ✏️ Editar viatge
-                                    </button>
-                                    <button className="tn-detail__btn tn-detail__btn--delete" onClick={handleDelete}>
-                                        🗑️ Eliminar
-                                    </button>
-                                </>
-                            )}
-                        </div>
-
-                        {/* Info destí — fotos, mapa, temps */}
                         <DestinationInfo destination={trip.destination} />
                     </div>
 
-                    {/* Columna dreta: Xat */}
-                    <div>
+                    <div className="col-12 col-lg-4">
                         {enrolled || isOwnerOrAdmin ? (
                             <TripChat tripId={id} />
                         ) : (
-                            <div className="tn-detail__card">
-                                <div className="tn-detail__card-header">
-                                    <span>💬 Xat del grup</span>
-                                </div>
-                                <div className="tn-detail__card-body" style={{textAlign:'center',padding:'40px 28px'}}>
-                                    <div style={{fontSize:'2.5rem',marginBottom:12}}>🔒</div>
-                                    <p style={{color:'#7f8c8d',margin:0,fontSize:'0.9rem'}}>
-                                        Inscriu-te al viatge per accedir al xat del grup.
-                                    </p>
+                            <div className="card border-0 shadow-sm">
+                                <div className="card-body text-center py-4">
+                                    <h2 className="h6">Xat del grup bloquejat</h2>
+                                    <p className="text-secondary mb-0">Inscriu-te al viatge per accedir al xat.</p>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-        </article>
+        </section>
     )
 }
+

@@ -1,5 +1,6 @@
+// Guardia de rutas: bloquea acceso si no hay sesion o no cumple rol.
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import useAuth from '../context/useAuth'
 
 export default function ProtectedRoute({ children, roles }) {
     const { user, token, loading } = useAuth()
@@ -17,3 +18,4 @@ export default function ProtectedRoute({ children, roles }) {
 
     return children
 }
+

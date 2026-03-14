@@ -1,49 +1,48 @@
-// ══════════════════════════════════════════
-// Toast.jsx — Notificacions globals
-// Ús: import { useToast } from './Toast'
-//     const toast = useToast()
-//     toast.success('Missatge!')
-//     toast.error('Error!')
-// ══════════════════════════════════════════
-import { createContext, useContext, useState, useCallback } from 'react'
-import './Toast.css'
-
-const ToastCtx = createContext(null)
+// Provider de toasts: pinta avisos flotantes y los cierra automaticamente.
+import { useCallback, useState } from 'react'
+import ToastContext from './toast-context'
 
 export function ToastProvider({ children }) {
     const [toasts, setToasts] = useState([])
 
     const add = useCallback((message, type = 'success', duration = 4000) => {
         const id = Date.now()
-        setToasts(prev => [...prev, { id, message, type }])
-        setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), duration)
+        setToasts((prev) => [...prev, { id, message, type }])
+        setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), duration)
     }, [])
 
-    const remove = (id) => setToasts(prev => prev.filter(t => t.id !== id))
+    const remove = (id) => setToasts((prev) => prev.filter((t) => t.id !== id))
 
     const toast = {
         success: (msg) => add(msg, 'success'),
-        error:   (msg) => add(msg, 'error'),
-        info:    (msg) => add(msg, 'info'),
+        error: (msg) => add(msg, 'danger'),
+        info: (msg) => add(msg, 'info'),
         warning: (msg) => add(msg, 'warning'),
     }
 
-    const ICONS = { success:'✅', error:'❌', info:'ℹ️', warning:'⚠️' }
+    const ICONS = { success: '?', danger: '?', info: '??', warning: '??' }
 
     return (
-        <ToastCtx.Provider value={toast}>
+        <ToastContext.Provider value={toast}>
             {children}
-            <div className="tn-toast-container" role="region" aria-label="Notificacions" aria-live="polite">
-                {toasts.map(t => (
-                    <div key={t.id} className={`tn-toast tn-toast--${t.type}`} role="alert">
-                        <span className="tn-toast__icon" aria-hidden="true">{ICONS[t.type]}</span>
-                        <span className="tn-toast__msg">{t.message}</span>
-                        <button className="tn-toast__close" onClick={() => remove(t.id)} aria-label="Tancar">✕</button>
+            <div
+                className="position-fixed bottom-0 end-0 p-3 d-flex flex-column gap-2 z-3"
+                role="region"
+                aria-label="Notificacions"
+                aria-live="polite"
+            >
+                {toasts.map((t) => (
+                    <div key={t.id} className={`alert alert-${t.type} shadow-sm mb-0 d-flex align-items-center gap-2`} role="alert">
+                        <span aria-hidden="true">{ICONS[t.type]}</span>
+                        <span className="flex-grow-1">{t.message}</span>
+                        <button className="btn btn-sm btn-outline-secondary" onClick={() => remove(t.id)} aria-label="Tancar">
+                            ?
+                        </button>
                     </div>
                 ))}
             </div>
-        </ToastCtx.Provider>
+        </ToastContext.Provider>
     )
 }
 
-export const useToast = () => useContext(ToastCtx)
+

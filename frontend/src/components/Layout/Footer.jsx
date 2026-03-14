@@ -1,58 +1,57 @@
+// Pie de pagina con enlaces de plataforma y bloque legal.
 import { Link } from 'react-router-dom'
-import './Footer.css'
 
 export default function Footer() {
     const year = new Date().getFullYear()
 
     return (
-        <footer className="tn-footer" role="contentinfo">
-            <div className="tn-footer__inner">
-                <div className="tn-footer__top">
-
-                    {/* Brand */}
-                    <div className="tn-footer__brand-col">
-                        <div className="tn-footer__brand" aria-label="TripNest">
-                            <span aria-hidden="true">🪺</span>
-                            <span className="tn-footer__brand-name">Trip<span>Nest</span></span>
+        <footer className="bg-primary text-light mt-auto" role="contentinfo">
+            <div className="container py-5">
+                <div className="row g-4">
+                    <div className="col-12 col-lg-5">
+                        <div className="d-flex align-items-center gap-2 mb-2 fw-bold fs-4">
+                            <span aria-hidden="true">??</span>
+                            <span>Trip<span className="text-info">Nest</span></span>
                         </div>
-                        <p className="tn-footer__tagline">
-                            Planifica, comparteix i viu aventures en grup. La plataforma mediterrània per als amants dels viatges.
+                        <p className="mb-0 text-light-emphasis">
+                            Planifica, comparteix i viu aventures en grup. La plataforma mediterrania per als amants dels viatges.
                         </p>
                     </div>
 
-                    {/* Plataforma */}
-                    <div className="tn-footer__col">
-                        <h3 className="tn-footer__col-title">Plataforma</h3>
-                        <ul className="tn-footer__links" aria-label="Enllaços de plataforma">
-                            <li><Link to="/dashboard">🗺️ Explorar viatges</Link></li>
-                            <li><Link to="/register">✨ Crear compte</Link></li>
-                            <li><Link to="/login">🔑 Iniciar sessió</Link></li>
+                    <div className="col-6 col-lg-3">
+                        <h3 className="h6 text-uppercase small text-light-emphasis">Plataforma</h3>
+                        <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                            <li><Link to="/dashboard" className="link-light link-opacity-75-hover">Explorar viatges</Link></li>
+                            <li><Link to="/register" className="link-light link-opacity-75-hover">Crear compte</Link></li>
+                            <li><Link to="/login" className="link-light link-opacity-75-hover">Iniciar sessio</Link></li>
                         </ul>
                     </div>
 
-                    {/* Legal */}
-                    <div className="tn-footer__col">
-                        <h3 className="tn-footer__col-title">Legal</h3>
-                        <ul className="tn-footer__links" aria-label="Enllaços legals">
-                            <li><a href="/privacy">🔒 Privacitat</a></li>
-                            <li><a href="/terms">📄 Termes d'ús</a></li>
-                            <li><a href="/cookies">🍪 Política de cookies</a></li>
-                            <li><a href="/accessibility">♿ Accessibilitat</a></li>
+                    <div className="col-6 col-lg-4">
+                        <h3 className="h6 text-uppercase small text-light-emphasis">Legal</h3>
+                        <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
+                            <li><a href="/privacy" className="link-light link-opacity-75-hover">Privacitat</a></li>
+                            <li><a href="/terms" className="link-light link-opacity-75-hover">Termes d'us</a></li>
+                            <li><a href="/cookies" className="link-light link-opacity-75-hover">Politica de cookies</a></li>
+                            <li><a href="/accessibility" className="link-light link-opacity-75-hover">Accessibilitat</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <div className="tn-footer__bottom">
-                    <p className="tn-footer__copyright">
-                        © {year} TripNest. Fet amb 🌊 i ☀️ a la Mediterrània.
-                    </p>
-                    <p className="tn-footer__wcag">
-                        <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener noreferrer" aria-label="Conformitat WCAG 2.1 AA (s'obre en pestanya nova)">
-                            ♿ WCAG 2.1 AA
-                        </a>
-                    </p>
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 border-top border-light border-opacity-25 mt-4 pt-3">
+                    <p className="mb-0 small text-light-emphasis">� {year} TripNest. Fet amb mar i sol a la Mediterrania.</p>
+                    <a
+                        href="https://www.w3.org/WAI/WCAG21/quickref/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="small link-light"
+                        aria-label="Conformitat WCAG 2.1 AA"
+                    >
+                        WCAG 2.1 AA
+                    </a>
                 </div>
             </div>
         </footer>
     )
 }
+

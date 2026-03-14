@@ -1,5 +1,5 @@
+// Buscador/autocomplete de destinos con sugerencias destacadas.
 import { useState, useEffect, useRef, useCallback } from 'react'
-import './DestinationPicker.css'
 
 const POPULAR = [
     // Europa
@@ -162,10 +162,6 @@ const DESTINATIONS = POPULAR.filter((d, i, arr) =>
 const FEATURED = ['Barcelona','París','Bali','Tòquio','Marràqueix','Roma','Bangkok','Nova York']
     .map(n => DESTINATIONS.find(d => d.name === n)).filter(Boolean)
 
-const TYPE_COLOR = {
-    Platja:   '#3498DB', Illa: '#9B59B6', Muntanya: '#27AE60', Natura: '#16A085',
-    Cultura:  '#E67E22', Aventura: '#E74C3C', Ciutat: '#7F8C8D',
-}
 
 function normalize(s) {
     return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -240,23 +236,22 @@ export default function DestinationPicker({ value, onChange, required }) {
     const showFeatured = query.length === 0
 
     return (
-        <div className="dp">
+        <div className="position-relative">
             {selected ? (
-                <div className="dp__selected">
-                    <span className="dp__selected-flag">{selected.flag || '📍'}</span>
-                    <span className="dp__selected-text">{query}</span>
-                    <span style={{fontSize:'0.72rem',background:TYPE_COLOR[selected.type]||'#999',
-                        color:'#fff',padding:'2px 8px',borderRadius:50,fontWeight:700}}>
+                <div className="alert alert-success d-flex align-items-center gap-2 py-2 mb-0">
+                    <span className="">{selected.flag || '📍'}</span>
+                    <span className="flex-grow-1 text-truncate">{query}</span>
+                    <span className="badge rounded-pill text-bg-secondary">
             {selected.type}
           </span>
-                    <button type="button" className="dp__selected-change" onClick={handleClear}>Canviar</button>
+                    <button type="button" className="btn btn-sm btn-outline-success" onClick={handleClear}>Canviar</button>
                 </div>
             ) : (
-                <div className="dp__input-wrap">
-                    <span className="dp__input-icon">📍</span>
+                <div className="input-group">
+                    <span className="input-group-text">📍</span>
                     <input
                         ref={inputRef}
-                        className="dp__input"
+                        className="form-control"
                         type="text"
                         value={query}
                         onChange={handleInput}
@@ -267,41 +262,38 @@ export default function DestinationPicker({ value, onChange, required }) {
                         required={required}
                     />
                     {query && (
-                        <button type="button" className="dp__clear" onClick={handleClear}>✕</button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={handleClear}>✕</button>
                     )}
                 </div>
             )}
 
             {open && results.length > 0 && !selected && (
-                <div className="dp__dropdown" ref={dropRef}>
-                    <div className="dp__section-title">
+                <div className="dropdown-menu show w-100 mt-2 p-0 shadow overflow-auto" ref={dropRef}>
+                    <div className="dropdown-header">
                         {showFeatured ? '⭐ Destins destacats' : `🔍 ${results.length} resultats`}
                     </div>
                     {results.map((item, i) => (
                         <button
                             key={`${item.name}-${item.countryCode}-${i}`}
                             type="button"
-                            className={`dp__item ${i === activeIdx ? 'dp__item--active' : ''}`}
+                            className={`dropdown-item d-flex align-items-center gap-2 ${i === activeIdx ? 'active' : ''}`}
                             onClick={() => handleSelect(item)}
                         >
-                            <span className="dp__item-flag">{item.flag}</span>
-                            <div className="dp__item-info">
-                                <div className="dp__item-name">{item.name}</div>
-                                <div className="dp__item-sub">{item.country}</div>
+                            <span className="">{item.flag}</span>
+                            <div className="flex-grow-1 text-truncate">
+                                <div className="fw-semibold text-truncate">{item.name}</div>
+                                <div className="small text-body-secondary">{item.country}</div>
                             </div>
-                            <span className="dp__item-type" style={{
-                                background: (TYPE_COLOR[item.type]||'#7F8C8D') + '18',
-                                color: TYPE_COLOR[item.type]||'#7F8C8D'
-                            }}>{item.type}</span>
+                            <span className="badge rounded-pill text-bg-light border">{item.type}</span>
                         </button>
                     ))}
                 </div>
             )}
 
             {open && results.length === 0 && query.length > 1 && !selected && (
-                <div className="dp__dropdown" ref={dropRef}>
-                    <div className="dp__no-results">
-                        <div style={{fontSize:'1.5rem',marginBottom:6}}>🔍</div>
+                <div className="dropdown-menu show w-100 mt-2 p-0 shadow overflow-auto" ref={dropRef}>
+                    <div className="text-center text-body-secondary p-3">
+                        <div className="fs-5 mb-1">🔍</div>
                         No trobat. Escriu-lo manualment i prem Enter.
                     </div>
                 </div>
@@ -309,3 +301,6 @@ export default function DestinationPicker({ value, onChange, required }) {
         </div>
     )
 }
+
+
+

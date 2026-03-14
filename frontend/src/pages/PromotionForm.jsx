@@ -1,119 +1,108 @@
+// Formulario para solicitar promocion de rol.
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/axiosConfig'
-import './PromotionForm.css'
 
 const MIN_CHARS = 20
 const MAX_CHARS = 500
 
 export default function PromotionForm() {
-    const [text,    setText]    = useState('')
-    const [error,   setError]   = useState('')
+    const [text, setText] = useState('')
+    const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const chars = text.length
-    const pct   = Math.min(100, Math.round((chars / MIN_CHARS) * 100))
     const ready = chars >= MIN_CHARS && chars <= MAX_CHARS
+    const progress = chars >= MIN_CHARS ? 'w-100' : chars >= 15 ? 'w-75' : chars >= 10 ? 'w-50' : chars > 0 ? 'w-25' : 'w-0'
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); setError('')
-        if (!ready) { setError(`Mínim ${MIN_CHARS} caràcters. Ara en tens ${chars}.`); return }
+        e.preventDefault()
+        setError('')
+
+        if (!ready) {
+            setError(`Minim ${MIN_CHARS} caracters. Ara en tens ${chars}.`)
+            return
+        }
+
         setLoading(true)
         try {
             await api.post('/users/promote-request', { msg_content: text })
             setSuccess(true)
         } catch (err) {
             const detail = err.response?.data?.detail || ''
-            if (detail.includes('pending'))  setError('Ja tens una petició pendent. Espera la resolució.')
-            else if (detail.includes('creator')) setError('Ja ets Creador de Viatges!')
-            else setError(detail || 'Error enviant la petició.')
-        } finally { setLoading(false) }
+            if (detail.includes('pending')) setError('Ja tens una peticio pendent. Espera la resolucio.')
+            else if (detail.includes('creator')) setError('Ja ets Creador de Viatges.')
+            else setError(detail || 'Error enviant la peticio.')
+        } finally {
+            setLoading(false)
+        }
     }
 
-    if (success) return (
-        <section className="tn-promo page-enter">
-            <div className="tn-container" style={{maxWidth:560}}>
-                <div className="tn-promo__card">
-                    <div className="tn-promo__success">
-                        <span className="tn-promo__success-icon">🎉</span>
-                        <h2>Petició enviada!</h2>
-                        <p>El nostre equip revisarà la teva sol·licitud i et notificarem quan sigui aprovada. Mentrestant, continua explorant els viatges disponibles.</p>
-                        <button className="tn-promo__success-btn" onClick={() => navigate('/dashboard')}>
-                            🗺️ Explorar viatges
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    )
-
-    return (
-        <section className="tn-promo page-enter">
-            <div className="tn-container" style={{maxWidth:600}}>
-
-                <div className="tn-promo__hero">
-                    <span className="tn-promo__icon">🚀</span>
-                    <h1>Converteix-te en Creador</h1>
-                    <p>Explica'ns per què vols crear i organitzar viatges a TripNest. Com més detallada sigui la teva motivació, millor!</p>
-                </div>
-
-                {/* Steps */}
-                <div className="tn-promo__steps">
-                    <div className="tn-promo__step">
-                        <span className="tn-promo__step-icon">✍️</span>
-                        <h3>Escriu la petició</h3>
-                        <p>Explica la teva motivació per organitzar viatges</p>
-                    </div>
-                    <div className="tn-promo__step">
-                        <span className="tn-promo__step-icon">👀</span>
-                        <h3>Revisió admin</h3>
-                        <p>L'equip TripNest revisarà la teva sol·licitud</p>
-                    </div>
-                    <div className="tn-promo__step">
-                        <span className="tn-promo__step-icon">✅</span>
-                        <h3>Accés complet</h3>
-                        <p>Crea i gestiona els teus propis viatges</p>
-                    </div>
-                </div>
-
-                {/* Formulari */}
-                <div className="tn-promo__card">
-                    <div className="tn-promo__card-header">
-                        <span>📝 La teva motivació</span>
-                    </div>
-                    <form className="tn-promo__form" onSubmit={handleSubmit} noValidate>
-
-                        {error && <div className="tn-promo__alert tn-promo__alert--error" role="alert">{error}</div>}
-
-                        <div className="tn-promo__field">
-                            <label htmlFor="promo-text">Per què vols ser Creador de Viatges?</label>
-                            <textarea
-                                id="promo-text"
-                                className="tn-promo__textarea"
-                                value={text}
-                                onChange={e => setText(e.target.value.slice(0, MAX_CHARS))}
-                                placeholder="Ex: M'apassionen els viatges i vull compartir experiències úniques amb altres persones. Tinc experiència organitzant excursions i m'agradaria..."
-                            />
-                            <div className="tn-promo__progress">
-                                <div className="tn-promo__progress-fill" style={{
-                                    width: `${pct}%`,
-                                    background: ready ? '#17A589' : chars > 0 ? '#E67E22' : '#ddd'
-                                }}/>
-                            </div>
-                            <div className={`tn-promo__char-count ${ready ? 'tn-promo__char-count--ok' : chars > 0 ? 'tn-promo__char-count--warn' : ''}`}>
-                                {chars}/{MAX_CHARS} {chars < MIN_CHARS ? `— mínim ${MIN_CHARS - chars} caràcters més` : '✓'}
+    if (success) {
+        return (
+            <section className="py-5">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-lg-7">
+                            <div className="alert alert-success text-center mb-0" role="status">
+                                <h2 className="h4 mb-2">Peticio enviada</h2>
+                                <p className="mb-3">L'equip revisara la sol�licitud i et notificarem la resolucio.</p>
+                                <button type="button" className="btn btn-success" onClick={() => navigate('/dashboard')}>
+                                    Explorar viatges
+                                </button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+        )
+    }
 
-                        <button type="submit" className="tn-promo__btn" disabled={loading || !ready}>
-                            {loading ? '⏳ Enviant...' : '🚀 Enviar petició'}
-                        </button>
+    return (
+        <section className="py-5">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-lg-8">
+                        <h1 className="h3 mb-2">Converteix-te en Creador</h1>
+                        <p className="text-secondary mb-4">Explica per que vols crear i organitzar viatges a TripNest.</p>
 
-                    </form>
+                        <div className="card border-0 shadow-sm">
+                            <div className="card-body p-4">
+                                {error && <div className="alert alert-danger" role="alert">{error}</div>}
+
+                                <form onSubmit={handleSubmit} noValidate>
+                                    <div className="mb-3">
+                                        <label htmlFor="promo-text" className="form-label">La teva motivacio</label>
+                                        <textarea
+                                            id="promo-text"
+                                            className="form-control"
+                                            rows="7"
+                                            value={text}
+                                            onChange={(e) => setText(e.target.value.slice(0, MAX_CHARS))}
+                                            placeholder="Explica la teva motivacio per organitzar viatges..."
+                                        />
+                                        <div className="progress mt-2" role="progressbar" aria-label="Progres text peticio">
+                                            <div className={`progress-bar ${ready ? 'bg-success' : 'bg-warning'} ${progress}`} />
+                                        </div>
+                                        <small className={`d-block mt-1 ${ready ? 'text-success' : 'text-secondary'}`}>
+                                            {chars}/{MAX_CHARS} {chars < MIN_CHARS ? `� falten ${MIN_CHARS - chars}` : '� correcte'}
+                                        </small>
+                                    </div>
+
+                                    <button type="submit" className="btn btn-primary" disabled={loading || !ready}>
+                                        {loading ? 'Enviant...' : 'Enviar peticio'}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     )
 }
+
+
+

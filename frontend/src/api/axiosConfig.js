@@ -1,3 +1,4 @@
+// Config de Axios: URL base y ajustes comunes para llamadas al backend.
 // src/api/axiosConfig.js
 import axios from 'axios'
 
@@ -12,3 +13,4 @@ api.interceptors.request.use((config) => {
 })
 
 export default api
+

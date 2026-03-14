@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+// Mapa de rutas: publicas, protegidas por login y por rol.
+import { Routes, Route } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 
 // Pages
@@ -100,8 +101,8 @@ export default function AppRoutes() {
             {/* ── REDIRECCIÓN 404 ──
                 - Cualquier ruta no definida redirige a "/" (home) usando replace para no dejar
                 - entradas en el historial del navegador. */}
-            <Route path="*" element={<Navigate to="/" replace />} /> {/* Fallback: redirige a la home */}
             <Route path="*" element={<NotFound />} />
         </Routes>
     )
 }
+
