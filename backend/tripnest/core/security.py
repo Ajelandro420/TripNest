@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from jose import jwt
 from tripnest.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Primero usamos pbkdf2_sha256 (estable en este entorno) y mantenemos bcrypt para compatibilidad.
+pwd_context = CryptContext(schemes=['pbkdf2_sha256', 'bcrypt'], deprecated='auto')
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)

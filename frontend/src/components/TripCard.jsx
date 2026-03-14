@@ -1,4 +1,5 @@
 // Tarjeta resumen de viaje para listados (dashboard/home).
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const BADGE = {
@@ -8,7 +9,7 @@ const BADGE = {
     'Cancel·lat': { cls: 'text-bg-danger' },
 }
 
-const EMOJIS = ['??', '???', '???', '?', '???', '??', '??', '??']
+const UNSPLASH_KEY = import.meta.env.VITE_UNSPLASH_KEY
 
 function widthClassFromPct(pct) {
     if (pct <= 0) return ''
@@ -18,24 +19,69 @@ function widthClassFromPct(pct) {
     return 'w-100'
 }
 
-export default function TripCard({ trip, index = 0 }) {
+function buildFallbackImage(trip) {
+    const seed = encodeURIComponent((trip.destination || trip.title || 'travel').toLowerCase())
+    return `https://picsum.photos/seed/${seed}/640/360`
+}
+
+async function fetchDestinationImage(trip) {
+    if (!UNSPLASH_KEY) return null
+
+    const queryBase = (trip.destination || trip.title || 'travel').trim()
+    const query = `${queryBase} city travel landmark`
+    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`
+
+    const res = await fetch(url, {
+        headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` },
+    })
+
+    if (!res.ok) return null
+
+    const data = await res.json()
+    return data?.results?.[0]?.urls?.regular || null
+}
+
+export default function TripCard({ trip }) {
     const navigate = useNavigate()
     const badge = BADGE[trip.status] || BADGE.Planificant
     const pct = trip.max_user_count > 0 ? Math.min(100, Math.round((trip.user_count / trip.max_user_count) * 100)) : 0
     const full = pct >= 100
-    const emoji = EMOJIS[index % EMOJIS.length]
+
+    const [imageUrl, setImageUrl] = useState(buildFallbackImage(trip))
+
+    useEffect(() => {
+        let active = true
+
+        fetchDestinationImage(trip)
+            .then((url) => {
+                if (!active || !url) return
+                setImageUrl(url)
+            })
+            .catch(() => {
+                // Fallback already set.
+            })
+
+        return () => {
+            active = false
+        }
+    }, [trip])
 
     return (
-        <article className="card h-100 border-0 shadow-sm">
-            <div className="card-header border-0 text-white bg-primary d-flex justify-content-between align-items-center">
-                <span className="fs-4" aria-hidden="true">{emoji}</span>
-                <span className={`badge rounded-pill ${badge.cls}`}>{trip.status}</span>
+        <article className="card h-100 border-0 shadow-sm overflow-hidden">
+            <div className="position-relative">
+                <img
+                    src={imageUrl}
+                    alt={`Vista de ${trip.destination}`}
+                    className="card-img-top"
+                    loading="lazy"
+                />
+                <span className={`badge ${badge.cls} position-absolute top-0 end-0 m-2`}>{trip.status}</span>
             </div>
 
             <div className="card-body d-flex flex-column">
                 <h3 className="h5 card-title mb-2">{trip.title}</h3>
-                <p className="small text-secondary mb-2">?? {trip.destination}</p>
-                <p className="small text-secondary mb-3">?? {trip.start_date?.slice(0, 10)}</p>
+                <p className="small text-secondary mb-2">Desti: {trip.destination}</p>
+                <p className="small text-secondary mb-3">Data inici: {trip.start_date?.slice(0, 10)}</p>
 
                 {trip.description && (
                     <p className="card-text text-secondary small">
@@ -64,5 +110,4 @@ export default function TripCard({ trip, index = 0 }) {
         </article>
     )
 }
-
 

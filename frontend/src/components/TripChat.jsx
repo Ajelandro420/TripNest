@@ -13,26 +13,39 @@ export default function TripChat({ tripId }) {
     const { token, user } = useAuth()
 
     useEffect(() => {
+        if (!token) return undefined
+
         api.get(`/trips/${tripId}/chat`)
             .then((res) => setMessages(res.data))
             .catch(() => setMessages([]))
 
-        const wsUrl = `ws://localhost:8000/trips/${tripId}/ws?token=${token}`
-        ws.current = new WebSocket(wsUrl)
+        const timer = setTimeout(() => {
+            const base = api.defaults.baseURL || 'http://localhost:8000'
+            const wsBase = base.replace(/^http/, 'ws')
+            const wsUrl = `${wsBase}/trips/${tripId}/ws?token=${encodeURIComponent(token)}`
 
-        ws.current.onopen = () => setWsStatus('open')
-        ws.current.onclose = () => setWsStatus('closed')
-        ws.current.onerror = () => setWsStatus('closed')
+            ws.current = new WebSocket(wsUrl)
+            setWsStatus('connecting')
 
-        ws.current.onmessage = (e) => {
-            try {
-                setMessages((prev) => [...prev, JSON.parse(e.data)])
-            } catch {
-                // Ignore malformed websocket payloads.
+            ws.current.onopen = () => setWsStatus('open')
+            ws.current.onclose = () => setWsStatus('closed')
+            ws.current.onerror = () => setWsStatus('closed')
+
+            ws.current.onmessage = (e) => {
+                try {
+                    setMessages((prev) => [...prev, JSON.parse(e.data)])
+                } catch {
+                    // Ignore malformed websocket payloads.
+                }
+            }
+        }, 120)
+
+        return () => {
+            clearTimeout(timer)
+            if (ws.current && ws.current.readyState <= WebSocket.OPEN) {
+                ws.current.close()
             }
         }
-
-        return () => ws.current?.close()
     }, [tripId, token])
 
     useEffect(() => {
@@ -120,5 +133,4 @@ export default function TripChat({ tripId }) {
         </div>
     )
 }
-
 

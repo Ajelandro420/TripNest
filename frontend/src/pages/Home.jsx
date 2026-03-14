@@ -1,20 +1,19 @@
 // Home publica: presenta la plataforma y llamados a la accion.
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import api from '../api/axiosConfig'
 
 const FEATURES = [
     {
-        icon: '???',
         title: 'Planifica',
         text: 'Crea itineraris detallats, afegeix destins i organitza cada dia del viatge amb el teu grup.',
     },
     {
-        icon: '??',
         title: "Comunica't",
         text: 'Xat integrat per a cada viatge. Comparteix idees, dubtes i moments amb tots els participants.',
     },
     {
-        icon: '??',
         title: 'Gestiona',
         text: "Control total dels participants, rols i inscripcions. Tu decideixes qui s'uneix a l'aventura.",
     },
@@ -27,29 +26,63 @@ const STEPS = [
     { n: '04', title: "Viu l'aventura", text: 'Coordineu-vos amb el xat i gaudiu de cada moment.' },
 ]
 
+function formatStat(value) {
+    return new Intl.NumberFormat('es-ES').format(value)
+}
+
 export default function Home() {
     const { token } = useAuth()
+    const [stats, setStats] = useState({ travelers_active: 0, trips_created: 0, countries_visited: 0 })
+
+    useEffect(() => {
+        let active = true
+
+        api.get('/trips/public-stats')
+            .then((res) => {
+                if (!active) return
+                setStats({
+                    travelers_active: Number(res.data?.travelers_active || 0),
+                    trips_created: Number(res.data?.trips_created || 0),
+                    countries_visited: Number(res.data?.countries_visited || 0),
+                })
+            })
+            .catch(() => {
+                if (!active) return
+                setStats({ travelers_active: 0, trips_created: 0, countries_visited: 0 })
+            })
+
+        return () => {
+            active = false
+        }
+    }, [])
 
     return (
         <>
-            <section className="py-5 bg-light border-bottom" aria-labelledby="hero-title">
-                <div className="container py-4">
+            <section className="position-relative overflow-hidden border-bottom" aria-labelledby="hero-title">
+                <img
+                    src="https://picsum.photos/seed/tripnest-hero/1600/900"
+                    alt="Paisatge natural"
+                    className="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
+                />
+                <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50" aria-hidden="true" />
+
+                <div className="container py-5 position-relative text-white">
                     <div className="row justify-content-center text-center">
                         <div className="col-12 col-lg-8">
-                            <p className="text-uppercase small text-primary fw-semibold mb-2">La plataforma mediterrania de viatges</p>
-                            <h1 id="hero-title" className="display-6 fw-bold mb-3">
-                                Viatja en grup, <span className="text-primary">sense complicacions</span>
+                            <p className="text-uppercase small text-warning fw-semibold mb-2">La plataforma mediterrania de viatges</p>
+                            <h1 id="hero-title" className="display-5 fw-bold mb-3">
+                                Viatja en grup, <span className="text-warning">sense complicacions</span>
                             </h1>
-                            <p className="lead text-secondary mb-4">
+                            <p className="lead mb-4">
                                 TripNest es la manera mes senzilla de planificar, coordinar i viure aventures en grup.
                             </p>
                             <div className="d-flex flex-column flex-sm-row justify-content-center gap-2">
                                 {token ? (
-                                    <Link to="/dashboard" className="btn btn-primary btn-lg">Explorar viatges</Link>
+                                    <Link to="/dashboard" className="btn btn-warning btn-lg text-dark">Explorar viatges</Link>
                                 ) : (
                                     <>
-                                        <Link to="/register" className="btn btn-primary btn-lg">Comenca ara</Link>
-                                        <Link to="/login" className="btn btn-outline-primary btn-lg">Ja tinc compte</Link>
+                                        <Link to="/register" className="btn btn-success btn-lg">Comenca ara</Link>
+                                        <Link to="/login" className="btn btn-outline-light btn-lg">Ja tinc compte</Link>
                                     </>
                                 )}
                             </div>
@@ -58,13 +91,27 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="py-4 border-bottom" aria-label="Estadistiques de la plataforma">
+            <section className="py-4 border-bottom border-warning-subtle bg-warning-subtle" aria-label="Estadistiques de la plataforma">
                 <div className="container">
-                    <div className="row row-cols-2 row-cols-md-4 g-3 text-center">
-                        <div className="col"><div className="p-3 border rounded bg-white"><div className="h4 mb-0">+2.400</div><small className="text-secondary">Viatgers actius</small></div></div>
-                        <div className="col"><div className="p-3 border rounded bg-white"><div className="h4 mb-0">+180</div><small className="text-secondary">Viatges creats</small></div></div>
-                        <div className="col"><div className="p-3 border rounded bg-white"><div className="h4 mb-0">34</div><small className="text-secondary">Paisos visitats</small></div></div>
-                        <div className="col"><div className="p-3 border rounded bg-white"><div className="h4 mb-0">98%</div><small className="text-secondary">Satisfaccio</small></div></div>
+                    <div className="row row-cols-1 row-cols-md-3 g-3 text-center">
+                        <div className="col">
+                            <div className="p-3 border border-warning-subtle rounded bg-white">
+                                <div className="h4 mb-0">{formatStat(stats.travelers_active)}</div>
+                                <small className="text-secondary">Viatgers actius</small>
+                            </div>
+                        </div>
+                        <div className="col">
+                            <div className="p-3 border border-warning-subtle rounded bg-white">
+                                <div className="h4 mb-0">{formatStat(stats.trips_created)}</div>
+                                <small className="text-secondary">Viatges creats</small>
+                            </div>
+                        </div>
+                        <div className="col">
+                            <div className="p-3 border border-warning-subtle rounded bg-white">
+                                <div className="h4 mb-0">{formatStat(stats.countries_visited)}</div>
+                                <small className="text-secondary">Paisos visitats</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -81,7 +128,6 @@ export default function Home() {
                             <article key={f.title} className="col-12 col-md-4" role="listitem">
                                 <div className="card h-100 border-0 shadow-sm">
                                     <div className="card-body">
-                                        <div className="fs-3 mb-2" aria-hidden="true">{f.icon}</div>
                                         <h3 className="h5">{f.title}</h3>
                                         <p className="text-secondary mb-0">{f.text}</p>
                                     </div>
@@ -92,7 +138,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="py-5 bg-light" aria-labelledby="how-title">
+            <section className="py-5 bg-info-subtle" aria-labelledby="how-title">
                 <div className="container">
                     <div className="text-center mb-4">
                         <p className="text-uppercase small text-primary fw-semibold mb-2">Proces simple</p>
@@ -124,6 +170,3 @@ export default function Home() {
         </>
     )
 }
-
-
-

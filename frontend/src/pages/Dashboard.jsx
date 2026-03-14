@@ -48,7 +48,7 @@ export default function Dashboard() {
                 <div className="card border-0 shadow-sm mb-4">
                     <div className="card-body d-flex flex-column gap-3">
                         <div className="input-group">
-                            <span className="input-group-text">??</span>
+                            <span className="input-group-text">Cerca</span>
                             <input
                                 type="search"
                                 className="form-control"
@@ -108,6 +108,8 @@ export default function Dashboard() {
         </section>
     )
 }
+
+
 
 
 

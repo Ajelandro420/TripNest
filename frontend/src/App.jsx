@@ -9,12 +9,12 @@ import AppRoutes from './routes/AppRoutes'
 
 function AppSkeleton() {
     return (
-        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-3 bg-primary z-3">
-            <div className="spinner-border text-light" role="status" aria-label="Carregant aplicacio" />
-            <p className="h4 text-white fw-bold mb-0">
-                Trip<span className="text-info">Nest</span>
+        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center gap-3 bg-light z-3">
+            <div className="spinner-border text-info" role="status" aria-label="Carregant aplicacio" />
+            <p className="h4 text-success fw-bold mb-0">
+                Trip<span className="text-warning">Nest</span>
             </p>
-            <p className="small text-light mb-0">Inicialitzant sessio...</p>
+            <p className="small text-secondary mb-0">Inicialitzant sessio...</p>
         </div>
     )
 }

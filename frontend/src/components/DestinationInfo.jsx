@@ -4,21 +4,21 @@ import { useEffect, useRef, useState } from 'react'
 const UNSPLASH_KEY = import.meta.env.VITE_UNSPLASH_KEY
 
 const MOCK_ATTRACTIONS = [
-    { name: 'Centre Historic', type: 'Monument', icon: '???' },
-    { name: 'Mercat Local', type: 'Mercat', icon: '??' },
-    { name: 'Mirador Principal', type: 'Natura', icon: '??' },
+    { name: 'Centre Historic', type: 'Monument' },
+    { name: 'Mercat Local', type: 'Mercat' },
+    { name: 'Mirador Principal', type: 'Natura' },
 ]
 
 const MOCK_RESTAURANTS = [
-    { name: 'La Taula Local', cuisine: 'Cuina tradicional', icon: '???' },
-    { name: 'Cafe del Mercat', cuisine: 'Cafeteria', icon: '?' },
-    { name: 'El Raco del Port', cuisine: 'Marisc', icon: '??' },
+    { name: 'La Taula Local', cuisine: 'Cuina tradicional' },
+    { name: 'Cafe del Mercat', cuisine: 'Cafeteria' },
+    { name: 'El Raco del Port', cuisine: 'Marisc' },
 ]
 
 const MOCK_HOTELS = [
-    { name: 'Hotel Central', stars: '????', icon: '??' },
-    { name: 'Hostal del Viatger', stars: '???', icon: '???' },
-    { name: 'Apart. Vista Mar', stars: '?????', icon: '??' },
+    { name: 'Hotel Central', stars: '4 estrelles' },
+    { name: 'Hostal del Viatger', stars: '3 estrelles' },
+    { name: 'Apart. Vista Mar', stars: '5 estrelles' },
 ]
 
 async function geocode(destination) {
@@ -100,13 +100,10 @@ function InfoCard({ title, items }) {
                 <h3 className="h6 text-uppercase text-secondary mb-3">{title}</h3>
                 <ul className="list-unstyled mb-0 d-flex flex-column gap-2">
                     {items.map((item) => (
-                        <li key={item.name} className="d-flex align-items-start gap-2 small">
-                            <span aria-hidden="true">{item.icon}</span>
-                            <span>
-                                <strong>{item.name}</strong>
-                                <br />
-                                <span className="text-secondary">{item.type || item.cuisine || item.stars}</span>
-                            </span>
+                        <li key={item.name} className="small">
+                            <strong>{item.name}</strong>
+                            <br />
+                            <span className="text-secondary">{item.type || item.cuisine || item.stars}</span>
                         </li>
                     ))}
                 </ul>
@@ -156,7 +153,7 @@ export default function DestinationInfo({ destination }) {
                                         rel="noopener noreferrer"
                                         className="small text-decoration-none"
                                     >
-                                        ?? {p.user.name} · Unsplash
+                                        Autor: {p.user.name} · Unsplash
                                     </a>
                                 </div>
                             </div>
@@ -170,7 +167,7 @@ export default function DestinationInfo({ destination }) {
                     <div>
                         <strong>{weather.temp}°C</strong> · {weather.desc}
                     </div>
-                    <div className="small text-secondary">?? {weather.humidity}% · ?? {weather.wind} km/h</div>
+                    <div className="small text-secondary">Humitat: {weather.humidity}% · Vent: {weather.wind} km/h</div>
                     <div className="small ms-md-auto text-secondary">Temps actual a {city}</div>
                 </div>
             )}
@@ -191,5 +188,4 @@ export default function DestinationInfo({ destination }) {
         </section>
     )
 }
-
 

@@ -22,11 +22,10 @@ export default function Navbar() {
     const initials = user?.full_name?.split(' ').map((w) => w[0]).join('').substring(0, 2).toUpperCase() || '?'
 
     return (
-        <nav className={`navbar navbar-expand-lg fixed-top navbar-dark shadow-sm ${scrolled ? 'bg-primary' : 'bg-primary'}`} aria-label="Navegacio principal">
+        <nav className={`navbar navbar-expand-lg fixed-top navbar-light shadow-sm transition-all ${scrolled ? 'bg-info bg-opacity-25' : 'bg-info bg-opacity-10'}`} aria-label="Navegacio principal">
             <div className="container py-1">
                 <Link to="/" className="navbar-brand fw-bold d-inline-flex align-items-center gap-2" aria-label="TripNest inici">
-                    <span aria-hidden="true">??</span>
-                    <span>Trip<span className="text-info">Nest</span></span>
+                    <span><span className="text-primary">Trip</span><span className="text-success">Nest</span></span>
                 </Link>
 
                 <button
@@ -52,7 +51,7 @@ export default function Navbar() {
                                     <NavLink to="/login" className="nav-link">Entrar</NavLink>
                                 </li>
                                 <li className="nav-item mt-2 mt-lg-0">
-                                    <Link to="/register" className="btn btn-warning fw-semibold">Registrar-se</Link>
+                                    <Link to="/register" className="btn btn-secondary shadow-sm rounded-pill text-white fw-semibold">Registrar-se</Link>
                                 </li>
                             </>
                         )}
@@ -73,14 +72,14 @@ export default function Navbar() {
 
                                 {(user?.role === 'creador' || user?.role === 'admin') && (
                                     <li className="nav-item mt-2 mt-lg-0">
-                                        <Link to="/trips/create" className="btn btn-success fw-semibold">+ Crear Viatge</Link>
+                                        <Link to="/trips/create" className="btn btn-success text-white shadow-sm rounded-pill fw-semibold">+ Crear Viatge</Link>
                                     </li>
                                 )}
 
                                 {user?.role === 'admin' && (
                                     <li className="nav-item dropdown">
                                         <button
-                                            className="nav-link dropdown-toggle border-0 bg-transparent text-white"
+                                            className="nav-link dropdown-toggle border-0 bg-transparent text-primary"
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                         >
@@ -95,7 +94,7 @@ export default function Navbar() {
 
                                 <li className="nav-item dropdown">
                                     <button
-                                        className="btn btn-outline-light dropdown-toggle border-0"
+                                        className="btn btn-outline-secondary rounded-pill dropdown-toggle border border-secondary"
                                         data-bs-toggle="dropdown"
                                         aria-expanded="false"
                                         aria-label={`Menu de ${user?.full_name || 'usuari'}`}
@@ -122,4 +121,5 @@ export default function Navbar() {
         </nav>
     )
 }
+
 

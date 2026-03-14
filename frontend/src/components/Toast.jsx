@@ -20,7 +20,7 @@ export function ToastProvider({ children }) {
         warning: (msg) => add(msg, 'warning'),
     }
 
-    const ICONS = { success: '?', danger: '?', info: '??', warning: '??' }
+    const ICONS = { success: 'OK', danger: 'ERR', info: 'INFO', warning: 'WARN' }
 
     return (
         <ToastContext.Provider value={toast}>
@@ -33,10 +33,10 @@ export function ToastProvider({ children }) {
             >
                 {toasts.map((t) => (
                     <div key={t.id} className={`alert alert-${t.type} shadow-sm mb-0 d-flex align-items-center gap-2`} role="alert">
-                        <span aria-hidden="true">{ICONS[t.type]}</span>
+                        <span aria-hidden="true" className="small fw-semibold">{ICONS[t.type]}</span>
                         <span className="flex-grow-1">{t.message}</span>
                         <button className="btn btn-sm btn-outline-secondary" onClick={() => remove(t.id)} aria-label="Tancar">
-                            ?
+                            X
                         </button>
                     </div>
                 ))}
@@ -44,5 +44,3 @@ export function ToastProvider({ children }) {
         </ToastContext.Provider>
     )
 }
-
-

@@ -10,8 +10,7 @@ export default function Footer() {
                 <div className="row g-4">
                     <div className="col-12 col-lg-5">
                         <div className="d-flex align-items-center gap-2 mb-2 fw-bold fs-4">
-                            <span aria-hidden="true">??</span>
-                            <span>Trip<span className="text-info">Nest</span></span>
+                            <span>Trip<span className="text-warning">Nest</span></span>
                         </div>
                         <p className="mb-0 text-light-emphasis">
                             Planifica, comparteix i viu aventures en grup. La plataforma mediterrania per als amants dels viatges.
@@ -54,4 +53,6 @@ export default function Footer() {
         </footer>
     )
 }
+
+
 

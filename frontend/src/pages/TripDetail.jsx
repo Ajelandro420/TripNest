@@ -129,7 +129,7 @@ export default function TripDetail() {
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                     <div>
                         <h1 className="h3 mb-1">{trip.title}</h1>
-                        <p className="text-secondary mb-0">?? {trip.destination} · ?? {trip.start_date} ? {trip.end_date}</p>
+                        <p className="text-secondary mb-0">Desti: {trip.destination} - Dates: {trip.start_date} - {trip.end_date}</p>
                     </div>
                     <span className={`badge fs-6 ${STATUS_MAP[trip.status] || 'text-bg-primary'}`}>{trip.status}</span>
                 </div>
@@ -192,4 +192,6 @@ export default function TripDetail() {
         </section>
     )
 }
+
+
 
