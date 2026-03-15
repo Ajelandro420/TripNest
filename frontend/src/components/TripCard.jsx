@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const BADGE = {
-    Planificant: { cls: 'text-bg-primary' },
-    Actiu: { cls: 'text-bg-success' },
-    Completat: { cls: 'text-bg-secondary' },
-    'Cancel·lat': { cls: 'text-bg-danger' },
+    Planificant:  { cls: 'text-bg-primary'   },
+    Actiu:        { cls: 'text-bg-success'   },
+    Completat:    { cls: 'text-bg-secondary' },
+    'CancelÂ·lat': { cls: 'text-bg-danger'    },
 }
 
 const UNSPLASH_KEY = import.meta.env.VITE_UNSPLASH_KEY
 
 function widthClassFromPct(pct) {
-    if (pct <= 0) return ''
+    if (pct <= 0)  return ''
     if (pct <= 25) return 'w-25'
     if (pct <= 50) return 'w-50'
     if (pct <= 75) return 'w-75'
@@ -26,17 +26,11 @@ function buildFallbackImage(trip) {
 
 async function fetchDestinationImage(trip) {
     if (!UNSPLASH_KEY) return null
-
     const queryBase = (trip.destination || trip.title || 'travel').trim()
     const query = `${queryBase} city travel landmark`
     const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`
-
-    const res = await fetch(url, {
-        headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` },
-    })
-
+    const res = await fetch(url, { headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` } })
     if (!res.ok) return null
-
     const data = await res.json()
     return data?.results?.[0]?.urls?.regular || null
 }
@@ -44,26 +38,18 @@ async function fetchDestinationImage(trip) {
 export default function TripCard({ trip }) {
     const navigate = useNavigate()
     const badge = BADGE[trip.status] || BADGE.Planificant
-    const pct = trip.max_user_count > 0 ? Math.min(100, Math.round((trip.user_count / trip.max_user_count) * 100)) : 0
-    const full = pct >= 100
+    const pct   = trip.max_user_count > 0
+        ? Math.min(100, Math.round((trip.user_count / trip.max_user_count) * 100)) : 0
+    const full  = pct >= 100
 
     const [imageUrl, setImageUrl] = useState(buildFallbackImage(trip))
 
     useEffect(() => {
         let active = true
-
         fetchDestinationImage(trip)
-            .then((url) => {
-                if (!active || !url) return
-                setImageUrl(url)
-            })
-            .catch(() => {
-                // Fallback already set.
-            })
-
-        return () => {
-            active = false
-        }
+            .then((url) => { if (!active || !url) return; setImageUrl(url) })
+            .catch(() => {})
+        return () => { active = false }
     }, [trip])
 
     return (
@@ -75,7 +61,9 @@ export default function TripCard({ trip }) {
                     className="card-img-top"
                     loading="lazy"
                 />
-                <span className={`badge ${badge.cls} position-absolute top-0 end-0 m-2`}>{trip.status}</span>
+                <span className={`badge ${badge.cls} position-absolute top-0 end-0 m-2`}>
+                    {trip.status}
+                </span>
             </div>
 
             <div className="card-body d-flex flex-column">
@@ -85,16 +73,20 @@ export default function TripCard({ trip }) {
 
                 {trip.description && (
                     <p className="card-text text-secondary small">
-                        {trip.description.length > 110 ? `${trip.description.substring(0, 110)}...` : trip.description}
+                        {trip.description.length > 110
+                            ? `${trip.description.substring(0, 110)}...`
+                            : trip.description}
                     </p>
                 )}
 
                 <div className="mt-auto pt-2">
                     <div className="d-flex justify-content-between small fw-semibold mb-1">
                         <span>Participants</span>
-                        <span>{trip.user_count}/{trip.max_user_count}{full ? ' · Complet' : ''}</span>
+                        <span>{trip.user_count}/{trip.max_user_count}{full ? ' Â· Complet' : ''}</span>
                     </div>
-                    <div className="progress mb-3" role="progressbar" aria-label="Percentatge ocupacio" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
+                    <div className="progress mb-3" role="progressbar"
+                         aria-label="Percentatge ocupacio"
+                         aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
                         <div className={`progress-bar ${full ? 'bg-danger' : 'bg-success'} ${widthClassFromPct(pct)}`} />
                     </div>
                     <button
@@ -110,4 +102,3 @@ export default function TripCard({ trip }) {
         </article>
     )
 }
-

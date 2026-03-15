@@ -3,18 +3,18 @@ import { useEffect, useMemo, useState } from 'react'
 import api from '../api/axiosConfig'
 import TripCard from '../components/TripCard'
 
-const ESTATS = ['Tots', 'Planificant', 'Actiu', 'Completat', 'Cancel·lat']
+const ESTATS = ['Tots', 'Planificant', 'Actiu', 'Completat', 'CancelÂ·lat']
 
 function normalize(text = '') {
     return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 
 export default function Dashboard() {
-    const [trips, setTrips] = useState([])
+    const [trips,   setTrips]   = useState([])
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
-    const [search, setSearch] = useState('')
-    const [estat, setEstat] = useState('Tots')
+    const [error,   setError]   = useState('')
+    const [search,  setSearch]  = useState('')
+    const [estat,   setEstat]   = useState('Tots')
 
     useEffect(() => {
         api.get('/trips')
@@ -108,8 +108,3 @@ export default function Dashboard() {
         </section>
     )
 }
-
-
-
-
-

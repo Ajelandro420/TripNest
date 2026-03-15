@@ -5,13 +5,13 @@ import api from '../../api/axiosConfig'
 const ROLE_BADGE = {
     viatger: 'text-bg-primary',
     creador: 'text-bg-success',
-    admin: 'text-bg-warning',
+    admin:   'text-bg-warning',
 }
 
 export default function AdminUsers() {
-    const [users, setUsers] = useState([])
+    const [users,   setUsers]   = useState([])
     const [loading, setLoading] = useState(true)
-    const [msg, setMsg] = useState('')
+    const [msg,     setMsg]     = useState('')
     const [msgType, setMsgType] = useState('success')
 
     useEffect(() => {
@@ -62,36 +62,40 @@ export default function AdminUsers() {
                         <div className="table-responsive">
                             <table className="table table-hover align-middle mb-0">
                                 <thead className="table-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Usuari</th>
-                                        <th>Email</th>
-                                        <th>Rol</th>
-                                        <th>Accio</th>
-                                    </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Usuari</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Accio</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    {users.map((u) => (
-                                        <tr key={u.id}>
-                                            <td className="text-secondary">#{String(u.id).padStart(3, '0')}</td>
-                                            <td className="fw-semibold">{u.full_name}</td>
-                                            <td className="text-secondary">{u.email}</td>
-                                            <td><span className={`badge ${ROLE_BADGE[u.role] || 'text-bg-secondary'}`}>{u.role}</span></td>
-                                            <td>
-                                                {u.role !== 'admin' ? (
-                                                    <button
-                                                        type="button"
-                                                        className={`btn btn-sm ${u.role === 'viatger' ? 'btn-outline-success' : 'btn-outline-warning'}`}
-                                                        onClick={() => changeRole(u.id, u.role, u.full_name)}
-                                                    >
-                                                        {u.role === 'viatger' ? 'Promocionar' : 'Degradar'}
-                                                    </button>
-                                                ) : (
-                                                    <span className="text-secondary small">—</span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
+                                {users.map((u) => (
+                                    <tr key={u.id}>
+                                        <td className="text-secondary">#{String(u.id).padStart(3, '0')}</td>
+                                        <td className="fw-semibold">{u.full_name}</td>
+                                        <td className="text-secondary">{u.email}</td>
+                                        <td>
+                                                <span className={`badge ${ROLE_BADGE[u.role] || 'text-bg-secondary'}`}>
+                                                    {u.role}
+                                                </span>
+                                        </td>
+                                        <td>
+                                            {u.role !== 'admin' ? (
+                                                <button
+                                                    type="button"
+                                                    className={`btn btn-sm ${u.role === 'viatger' ? 'btn-outline-success' : 'btn-outline-warning'}`}
+                                                    onClick={() => changeRole(u.id, u.role, u.full_name)}
+                                                >
+                                                    {u.role === 'viatger' ? 'Promocionar' : 'Degradar'}
+                                                </button>
+                                            ) : (
+                                                <span className="text-secondary small">Admin</span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
                                 </tbody>
                             </table>
                         </div>
@@ -101,7 +105,3 @@ export default function AdminUsers() {
         </section>
     )
 }
-
-
-
-

@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react'
 import api from '../../api/axiosConfig'
 
 const STATUS = {
-    pending: { label: 'Pendent', badge: 'text-bg-warning' },
-    approved: { label: 'Aprovat', badge: 'text-bg-success' },
-    rejected: { label: 'Rebutjat', badge: 'text-bg-danger' },
+    pending:  { label: 'Pendent',  badge: 'text-bg-warning' },
+    approved: { label: 'Aprovat',  badge: 'text-bg-success' },
+    rejected: { label: 'Rebutjat', badge: 'text-bg-danger'  },
 }
 
 export default function AdminRequests() {
     const [requests, setRequests] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [msg, setMsg] = useState('')
-    const [msgType, setMsgType] = useState('success')
+    const [loading,  setLoading]  = useState(true)
+    const [msg,      setMsg]      = useState('')
+    const [msgType,  setMsgType]  = useState('success')
 
     useEffect(() => {
         api.get('/admin/promotions')
@@ -35,11 +35,11 @@ export default function AdminRequests() {
         }
     }
 
-    const pending = requests.filter((r) => r.status === 'pending')
+    const pending  = requests.filter((r) => r.status === 'pending')
     const resolved = requests.filter((r) => r.status !== 'pending')
 
     const RequestCard = ({ request }) => {
-        const st = STATUS[request.status] || STATUS.pending
+        const st   = STATUS[request.status] || STATUS.pending
         const name = request.user?.full_name || `Usuari #${request.user_id}`
         return (
             <div className="card border-0 shadow-sm mb-3">
@@ -52,29 +52,21 @@ export default function AdminRequests() {
                             </div>
                             <div className="text-secondary small mb-2">{request.user?.email || 'Sense correu'}</div>
                         </div>
-
                         {request.status === 'pending' && (
                             <div className="d-flex gap-2">
-                                <button
-                                    type="button"
-                                    className="btn btn-sm btn-outline-success"
-                                    onClick={() => handleDecision(request.id, 'approved', name)}
-                                >
+                                <button type="button" className="btn btn-sm btn-outline-success"
+                                        onClick={() => handleDecision(request.id, 'approved', name)}>
                                     Aprovar
                                 </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-sm btn-outline-danger"
-                                    onClick={() => handleDecision(request.id, 'rejected', name)}
-                                >
+                                <button type="button" className="btn btn-sm btn-outline-danger"
+                                        onClick={() => handleDecision(request.id, 'rejected', name)}>
                                     Rebutjar
                                 </button>
                             </div>
                         )}
                     </div>
-
-                    <blockquote className="blockquote mb-0 mt-2 small text-secondary">
-                        “{request.msg_content}”
+                    <blockquote className="blockquote mb-0 mt-2 small text-secondary fst-italic">
+                        "{request.msg_content}"
                     </blockquote>
                 </div>
             </div>
@@ -86,7 +78,7 @@ export default function AdminRequests() {
             <div className="container">
                 <div className="mb-4">
                     <h1 className="h3 mb-1">Peticions de Promocio</h1>
-                    <p className="text-secondary mb-0">Revisa i gestiona les sol·licituds per ser Creador de Viatges.</p>
+                    <p className="text-secondary mb-0">Revisa i gestiona les sollicituds per ser Creador de Viatges.</p>
                 </div>
 
                 {msg && (
@@ -125,7 +117,3 @@ export default function AdminRequests() {
         </section>
     )
 }
-
-
-
-
