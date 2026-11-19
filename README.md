@@ -25,15 +25,6 @@ Proyecto académico de DAW, con panel de administración y autenticación con JW
 - Panel de administración: gestión de usuarios y roles, y aprobación de solicitudes.
 - Estadísticas públicas en la página de inicio y página 404 personalizada.
 
-## Capturas
-
-<!-- Añade las imágenes en docs/screenshots/ y descomenta -->
-<!--
-![Inicio](docs/screenshots/home.png)
-![Detalle de viaje con chat](docs/screenshots/trip-detail.png)
-![Panel de administración](docs/screenshots/admin.png)
--->
-
 ## Cómo ejecutarlo
 
 Probado con Python 3.13 y Node.js 24.
