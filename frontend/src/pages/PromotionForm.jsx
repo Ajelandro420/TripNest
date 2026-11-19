@@ -33,7 +33,7 @@ export default function PromotionForm() {
         } catch (err) {
             const detail = err.response?.data?.detail || ''
             if (detail.includes('pending')) setError('Ja tens una peticio pendent. Espera la resolucio.')
-            else if (detail.includes('creator')) setError('Ja ets Creador de Viatges.')
+            else if (detail.includes('creador')) setError('Ja ets Creador de Viatges.')
             else setError(detail || 'Error enviant la peticio.')
         } finally {
             setLoading(false)
@@ -48,7 +48,7 @@ export default function PromotionForm() {
                         <div className="col-12 col-lg-7">
                             <div className="alert alert-success text-center mb-0" role="status">
                                 <h2 className="h4 mb-2">Peticio enviada</h2>
-                                <p className="mb-3">L'equip revisara la sol·licitud i et notificarem la resolucio.</p>
+                                <p className="mb-3">L'equip revisara la solÂ·licitud i et notificarem la resolucio.</p>
                                 <button type="button" className="btn btn-success" onClick={() => navigate('/dashboard')}>
                                     Explorar viatges
                                 </button>
@@ -87,7 +87,7 @@ export default function PromotionForm() {
                                             <div className={`progress-bar ${ready ? 'bg-success' : 'bg-warning'} ${progress}`} />
                                         </div>
                                         <small className={`d-block mt-1 ${ready ? 'text-success' : 'text-secondary'}`}>
-                                            {chars}/{MAX_CHARS} {chars < MIN_CHARS ? `· falten ${MIN_CHARS - chars}` : '· correcte'}
+                                            {chars}/{MAX_CHARS} {chars < MIN_CHARS ? `Â· falten ${MIN_CHARS - chars}` : 'Â· correcte'}
                                         </small>
                                     </div>
 

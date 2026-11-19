@@ -158,7 +158,7 @@ export default function TripEdit() {
                                                 <option value="Planificant">Planificant</option>
                                                 <option value="Actiu">Actiu</option>
                                                 <option value="Completat">Completat</option>
-                                                <option value="Cancel·lat">Cancel·lat</option>
+                                                <option value="CancelÂ·lat">CancelÂ·lat</option>
                                             </select>
                                         </div>
                                     </div>

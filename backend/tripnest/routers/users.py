@@ -132,7 +132,7 @@ def promote_request(
     Raises:
         HTTPException: Si el usuario ya es creador o tiene una solicitud pendiente.
     """
-    if current_user.role == "creator":
+    if current_user.role == "creador":
         raise HTTPException(status_code=400, detail="Ja ets creador")
 
     existing = db.query(PromotionRequest).filter(

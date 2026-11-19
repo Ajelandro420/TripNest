@@ -159,10 +159,10 @@ export default function Profile() {
                             <div className="card-body p-4">
                                 <h2 className="h5 mb-3">Estadistiques</h2>
                                 <div className="row row-cols-2 g-2 text-center">
-                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.trips_joined ?? '—'}</strong><div className="small text-secondary">Viatges units</div></div></div>
-                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.trips_created ?? '—'}</strong><div className="small text-secondary">Viatges creats</div></div></div>
-                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.messages_sent ?? '—'}</strong><div className="small text-secondary">Missatges</div></div></div>
-                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.days_travelled ?? '—'}</strong><div className="small text-secondary">Dies viatjats</div></div></div>
+                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.trips_joined ?? 'â€”'}</strong><div className="small text-secondary">Viatges units</div></div></div>
+                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.trips_created ?? 'â€”'}</strong><div className="small text-secondary">Viatges creats</div></div></div>
+                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.messages_sent ?? 'â€”'}</strong><div className="small text-secondary">Missatges</div></div></div>
+                                    <div className="col"><div className="border rounded p-2"><strong>{stats?.days_travelled ?? 'â€”'}</strong><div className="small text-secondary">Dies viatjats</div></div></div>
                                 </div>
                                 <p className="small text-secondary mt-3 mb-0">ID usuari: #{String(user.id).padStart(6, '0')}</p>
                             </div>

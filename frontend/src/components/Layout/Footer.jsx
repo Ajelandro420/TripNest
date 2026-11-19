@@ -38,7 +38,7 @@ export default function Footer() {
                 </div>
 
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 border-top border-light border-opacity-25 mt-4 pt-3">
-                    <p className="mb-0 small text-light-emphasis">© {year} TripNest. Fet amb mar i sol a la Mediterrania.</p>
+                    <p className="mb-0 small text-light-emphasis">Â© {year} TripNest. Fet amb mar i sol a la Mediterrania.</p>
                     <a
                         href="https://www.w3.org/WAI/WCAG21/quickref/"
                         target="_blank"
